@@ -1,0 +1,28 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html,body{
+    background-color: black;
+    height: 100%;
+}
+
+#app{
+    height: inherit;
+}
+
+main{
+    height: inherit;
+}
+
+.flex-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+canvas{
+    background-color: rgb(72, 72, 72);
+}

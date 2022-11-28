@@ -7,7 +7,7 @@ function TicTacToeApplication(){
     /**
      * @type {TTTGame} TicTacToeGame
      */
-    const TicTacToeInstance = null;
+    let TicTacToeInstance = null;
 
     this.start = function(){
 

@@ -4,13 +4,21 @@ function TicTacToeApplication(){
 
     const canvas = document.getElementById('application');
 
+    /**
+     * @type {TTTGame} TicTacToeGame
+     */
+    const TicTacToeInstance = null;
+
     this.start = function(){
 
         console.log("Application started...");
+
+        init();
     }
 
     function init(){
 
+        TicTacToeInstance = new TTTGame.TicTacToe(canvas,{});
     }
 
     function play(){

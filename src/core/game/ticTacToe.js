@@ -1,14 +1,4 @@
-import { GameState } from './gameState.js';
-
-const BoardOptions = {
-
-    RADUIS:60,
-    BORDER_WIDTH:10,
-    CELL_WIDTH:0,
-    CELL_CENTER:0,
-    CELL_PADDING:0,
-    OFFSET:0
-}
+import { GameState,BoardOptions,GameOptions } from './gameState.js';
 
 /**
  * @module
@@ -36,9 +26,11 @@ class TicTacToe {
      */
     #gameState = GameState.STARTING;
 
-    #playerMoves = [];
-
-    #computerMoves = [];
+    #gameMap = [
+        [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
+        [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
+        [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN]
+    ];
 
     /**
      * 
@@ -51,7 +43,7 @@ class TicTacToe {
         this.#drawingContext = this.#canvas.getContext('2d');
         this.#options = options;
 
-        this.#options.playerShape = "O";
+        this.#options.playerSign = "O";
 
         BoardOptions.CELL_WIDTH = (this.#canvas.width/3) - BoardOptions.BORDER_WIDTH;
         BoardOptions.CELL_CENTER = BoardOptions.CELL_WIDTH/2;
@@ -63,6 +55,9 @@ class TicTacToe {
         this.#initListeners();
     }
 
+    /**
+     * @description Init the TicTacToe game board.
+     */
     #initBoard(){
 
         this.#drawingContext.beginPath();
@@ -76,6 +71,12 @@ class TicTacToe {
         this.#drawingContext.closePath();
     }
 
+    /**
+     * 
+     * @param {string} shape 
+     * @param {number} cordX 
+     * @param {number} cordY 
+     */
     #draw(shape,cordX,cordY){
 
         this.#drawingContext.beginPath();
@@ -97,6 +98,9 @@ class TicTacToe {
         this.#drawingContext.closePath();
     }
 
+    /**
+     * @description Init the application event listeners.
+     */
     #initListeners(){
 
         this.#canvas.addEventListener('mousedown',(e) => this.#handleClick(e));
@@ -114,9 +118,23 @@ class TicTacToe {
         let cordX = Math.floor(mouseX/200);
         let cordY = Math.floor(mouseY/200);
         
-        this.#draw(this.#options.playerShape,cordX,cordY);
+        if(this.#canPlay(cordX,cordY)){
+            
+            this.#draw(this.#options.playerSign,cordX,cordY);
+            this.#gameMap[cordX][cordY] = GameOptions.PLAYER_SIGN;
+        }
     }
 
+    #canPlay(cellX,cellY){
+
+        return this.#gameMap[cellX][cellY] == GameOptions.EMPTY_SIGN
+    }
+
+    /**
+     * 
+     * @param {number} cordX 
+     * @param {number} cordY 
+     */
     #drawX(cordX,cordY){
 
         this.#drawingContext.moveTo(
@@ -140,6 +158,11 @@ class TicTacToe {
         );
     }
 
+    /**
+     * 
+     * @param {number} cordX 
+     * @param {number} cordY 
+     */
     #drawO(cordX,cordY){
 
         this.#drawingContext.moveTo(

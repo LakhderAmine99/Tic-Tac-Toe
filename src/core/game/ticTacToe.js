@@ -6,7 +6,8 @@ const BoardOptions = {
     BORDER_WIDTH:10,
     CELL_WIDTH:0,
     CELL_CENTER:0,
-    CELL_PADDING:0
+    CELL_PADDING:0,
+    OFFSET:0
 }
 
 /**
@@ -35,6 +36,10 @@ class TicTacToe {
      */
     #gameState = GameState.STARTING;
 
+    #playerMoves = [];
+
+    #computerMoves = [];
+
     /**
      * 
      * @param {HTMLCanvasElement} canvas 
@@ -46,13 +51,16 @@ class TicTacToe {
         this.#drawingContext = this.#canvas.getContext('2d');
         this.#options = options;
 
+        this.#options.playerShape = "O";
+
         BoardOptions.CELL_WIDTH = (this.#canvas.width/3) - BoardOptions.BORDER_WIDTH;
         BoardOptions.CELL_CENTER = BoardOptions.CELL_WIDTH/2;
         BoardOptions.CELL_PADDING = (BoardOptions.CELL_WIDTH - 2*BoardOptions.RADUIS)/2;
 
-        this.#initBoard();
+        BoardOptions.OFFSET = (3/2)*BoardOptions.BORDER_WIDTH;
 
-        this.#draw();
+        this.#initBoard();
+        this.#initListeners();
     }
 
     #initBoard(){
@@ -68,68 +76,84 @@ class TicTacToe {
         this.#drawingContext.closePath();
     }
 
-    #draw(x,y,w,h,color){
-
-        let CELL_NUMBER = 0;
+    #draw(shape,cordX,cordY){
 
         this.#drawingContext.beginPath();
 
-        // this is where we need to draw ether a O or an X.
+        switch(shape){
 
-        // draw the O here.
+            case 'O':
+                this.#drawO(cordX,cordY);
+            break;
+            
+            case 'X':
+                this.#drawX(cordX,cordY);
+            break;
+        }
 
-        this.#drawingContext.moveTo(
-            BoardOptions.CELL_CENTER+BoardOptions.RADUIS,
-            BoardOptions.CELL_CENTER
-        );
-
-        this.#drawingContext.arc(
-            BoardOptions.CELL_CENTER,
-            BoardOptions.CELL_CENTER,
-            BoardOptions.RADUIS,
-            0,
-            Math.PI*2
-        );
-
-        this.#drawingContext.moveTo(
-            5*BoardOptions.CELL_CENTER+2*(3/2)*BoardOptions.BORDER_WIDTH+BoardOptions.RADUIS,
-            BoardOptions.CELL_CENTER
-        );
-
-        this.#drawingContext.arc(
-            5*BoardOptions.CELL_CENTER+2*(3/2)*BoardOptions.BORDER_WIDTH,
-            BoardOptions.CELL_CENTER,
-            BoardOptions.RADUIS,
-            0,
-            Math.PI*2
-        );
-
-        // draw the X here.
-
-        this.#drawingContext.moveTo(
-            BoardOptions.CELL_PADDING,
-            BoardOptions.CELL_PADDING
-        );
-
-        this.#drawingContext.lineTo(
-            BoardOptions.CELL_WIDTH-BoardOptions.CELL_PADDING,
-            BoardOptions.CELL_WIDTH-BoardOptions.CELL_PADDING
-        );
-        
-        this.#drawingContext.moveTo(
-            BoardOptions.CELL_WIDTH-BoardOptions.CELL_PADDING,
-            BoardOptions.CELL_PADDING
-        );
-
-        this.#drawingContext.lineTo(
-            BoardOptions.CELL_PADDING,
-            BoardOptions.CELL_WIDTH-BoardOptions.CELL_PADDING
-        );
-
-        this.#drawingContext.lineWidth = 10;
+        this.#drawingContext.lineWidth = 5;
         this.#drawingContext.stroke();
 
         this.#drawingContext.closePath();
+    }
+
+    #initListeners(){
+
+        this.#canvas.addEventListener('mousedown',(e) => this.#handleClick(e));
+    }
+
+    /**
+     * 
+     * @param {MouseEvent} e 
+     */
+    #handleClick(e){
+
+        let mouseX = e.clientX - this.#canvas.getBoundingClientRect().left;
+        let mouseY = e.clientY - this.#canvas.getBoundingClientRect().top;
+
+        let cordX = Math.floor(mouseX/200);
+        let cordY = Math.floor(mouseY/200);
+        
+        this.#draw(this.#options.playerShape,cordX,cordY);
+    }
+
+    #drawX(cordX,cordY){
+
+        this.#drawingContext.moveTo(
+            BoardOptions.CELL_PADDING + cordX*BoardOptions.OFFSET + cordX*BoardOptions.CELL_WIDTH,
+            BoardOptions.CELL_PADDING + cordY*BoardOptions.OFFSET + cordY*BoardOptions.CELL_WIDTH
+        );
+
+        this.#drawingContext.lineTo(
+            (cordX+1)*BoardOptions.CELL_WIDTH + cordX*BoardOptions.OFFSET - BoardOptions.CELL_PADDING,
+            (cordY+1)*BoardOptions.CELL_WIDTH + cordY*BoardOptions.OFFSET - BoardOptions.CELL_PADDING
+        );
+        
+        this.#drawingContext.moveTo(
+            (cordX+1)*BoardOptions.CELL_WIDTH + cordX*BoardOptions.OFFSET - BoardOptions.CELL_PADDING,
+            BoardOptions.CELL_PADDING + cordY*BoardOptions.OFFSET + cordY*BoardOptions.CELL_WIDTH
+        );
+
+        this.#drawingContext.lineTo(
+            BoardOptions.CELL_PADDING + cordX*BoardOptions.OFFSET + cordX*BoardOptions.CELL_WIDTH,
+            (cordY+1)*BoardOptions.CELL_WIDTH + cordY*BoardOptions.OFFSET - BoardOptions.CELL_PADDING
+        );
+    }
+
+    #drawO(cordX,cordY){
+
+        this.#drawingContext.moveTo(
+            (2*cordX+1)*BoardOptions.CELL_CENTER+BoardOptions.RADUIS+cordX*BoardOptions.OFFSET,
+            (2*cordY+1)*BoardOptions.CELL_CENTER+cordY*BoardOptions.OFFSET
+        );
+
+        this.#drawingContext.arc(
+            (2*cordX+1)*BoardOptions.CELL_CENTER+cordX*BoardOptions.OFFSET,
+            (2*cordY+1)*BoardOptions.CELL_CENTER+cordY*BoardOptions.OFFSET,
+            BoardOptions.RADUIS,
+            0,
+            Math.PI*2
+        );
     }
 
     play(){

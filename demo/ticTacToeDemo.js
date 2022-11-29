@@ -18,7 +18,10 @@ function TicTacToeApplication(){
 
     function init(){
 
-        TicTacToeInstance = new TTTGame.TicTacToe(canvas,{});
+        TicTacToeInstance = new TTTGame.TicTacToe(canvas,{
+            playerSign:"X",
+            aiSign:"O"
+        });
     }
 
     function play(){

@@ -43,8 +43,6 @@ class TicTacToe {
         this.#drawingContext = this.#canvas.getContext('2d');
         this.#options = options;
 
-        this.#options.playerSign = "O";
-
         BoardOptions.CELL_WIDTH = (this.#canvas.width/3) - BoardOptions.BORDER_WIDTH;
         BoardOptions.CELL_CENTER = BoardOptions.CELL_WIDTH/2;
         BoardOptions.CELL_PADDING = (BoardOptions.CELL_WIDTH - 2*BoardOptions.RADUIS)/2;

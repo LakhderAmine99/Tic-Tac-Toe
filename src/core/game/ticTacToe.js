@@ -24,13 +24,41 @@ class TicTacToe {
     /**
      * @type {number} #gameState
      */
-    #gameState = GameState.STARTING;
+    #gameState = GameState.PLAYING;
 
+    /**
+     * @type {[[]]} #gameMap
+     */
     #gameMap = [
         [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
         [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
         [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN]
     ];
+
+    /**
+     * @type {[[]]} #gameCombo
+     */
+    #gameCombo = [
+        [0,1,2],
+        [0,3,6],
+        [0,4,8],
+        [3,4,5],
+        [1,4,7],
+        [2,5,8],
+        [6,7,8],
+        [2,4,6]
+    ];
+
+    #playerStrategy = "A";
+
+    #playerMoves = [];
+
+    #aiMoves = [];
+
+    #remainingMoves = [0,1,2,3,4,5,6,7,8];
+
+    #playerCellX;
+    #playerCellY;
 
     /**
      * 
@@ -113,16 +141,18 @@ class TicTacToe {
         let mouseX = e.clientX - this.#canvas.getBoundingClientRect().left;
         let mouseY = e.clientY - this.#canvas.getBoundingClientRect().top;
 
-        let cordX = Math.floor(mouseX/200);
-        let cordY = Math.floor(mouseY/200);
-        
-        if(this.#canPlay(cordX,cordY)){
-            
-            this.#draw(this.#options.playerSign,cordX,cordY);
-            this.#gameMap[cordX][cordY] = GameOptions.PLAYER_SIGN;
-        }
+        this.#playerCellX = Math.floor(mouseX/200);
+        this.#playerCellY = Math.floor(mouseY/200);
+
+        this.update();
     }
 
+    /**
+     * 
+     * @param {number} cellX 
+     * @param {number} cellY 
+     * @returns True if there's an empty cell to play in, false otherwise.
+     */
     #canPlay(cellX,cellY){
 
         return this.#gameMap[cellX][cellY] == GameOptions.EMPTY_SIGN
@@ -177,24 +207,108 @@ class TicTacToe {
         );
     }
 
+    /**
+     * @description
+     */
     play(){
-        return;
+        // check if there's a possible empty cell to play and check if there's a winner.
+
+        switch(this.#playerStrategy){
+
+            case "A":
+
+                this.#options.playerSign = "X";
+                
+                if(this.#canPlay(this.#playerCellX,this.#playerCellY)){
+        
+                    this.#draw(this.#options.playerSign,this.#playerCellX,this.#playerCellY);
+                    this.#gameMap[this.#playerCellX][this.#playerCellY] = GameOptions.PLAYER_SIGN;
+                    this.#remainingMoves.splice(3*this.#playerCellX+this.#playerCellY,1);
+                }
+        
+                let aiMove = this.#nextMove();
+        
+                window.setTimeout(() => {
+        
+                    if(this.#canPlay(aiMove.x,aiMove.y)){
+                        
+                        this.#draw("O",aiMove.x,aiMove.y);
+                        this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
+                        this.#remainingMoves.splice(3*aiMove.x+aiMove.y,1);
+                    }
+        
+                },1000);
+
+            break;
+
+            case "D":
+
+            break;
+        }
     }
 
+    #nextMove(){
+
+        let cellNumber,x,y; 
+
+        switch(this.#playerStrategy){
+
+            case "A":
+
+            break;
+
+            case "D":
+
+            break;
+        }
+
+        return {
+            x:x,
+            y:y
+        };
+    }
+
+    /**
+     * @description
+     */
     update(){
-        return;
+    
+        // update the game state.
+
+        switch(this.#gameState){
+
+            case GameState.PLAYING:
+                this.play();
+            break;
+
+            case GameState.ENDING:
+                this.end();
+            break;
+        }
     }
 
+    /**
+     * @description
+     */
     pause(){
-        return;
+    
+        // pause the game and show current state.
     }
 
+    /**
+     * @description
+     */
     end(){
-        return;
+    
+        // end the game and display final state.
     }
 
+    /**
+     * @description
+     */
     reset(){
-        return;
+    
+        // reset the game state.
     }
 }
 

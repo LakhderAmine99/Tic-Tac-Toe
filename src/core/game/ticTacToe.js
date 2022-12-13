@@ -211,8 +211,6 @@ class TicTacToe {
      * @description
      */
     play(){
-        // check if there's a possible empty cell to play and check if there's a winner.
-
         switch(this.#playerStrategy){
 
             case "A":
@@ -226,18 +224,18 @@ class TicTacToe {
                     this.#remainingMoves.splice(3*this.#playerCellX+this.#playerCellY,1);
                 }
         
-                let aiMove = this.#nextMove();
+                // let aiMove = this.#nextMove();
         
-                window.setTimeout(() => {
+                // window.setTimeout(() => {
         
-                    if(this.#canPlay(aiMove.x,aiMove.y)){
+                //     if(this.#canPlay(aiMove.x,aiMove.y)){
                         
-                        this.#draw("O",aiMove.x,aiMove.y);
-                        this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
-                        this.#remainingMoves.splice(3*aiMove.x+aiMove.y,1);
-                    }
+                //         this.#draw("O",aiMove.x,aiMove.y);
+                //         this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
+                //         this.#remainingMoves.splice(3*aiMove.x+aiMove.y,1);
+                //     }
         
-                },1000);
+                // },1000);
 
             break;
 
@@ -245,6 +243,34 @@ class TicTacToe {
 
             break;
         }
+
+        if(this.#isWinnerExists() > 0){
+
+            this.#gameState = GameState.ENDING;
+            this.update();
+            return;
+        }
+    }
+
+    /**
+     * 
+     * @returns The winner sign if there's a winner otherwise returns -1.
+     */
+    #isWinnerExists(){
+
+        for(let gc of this.#gameCombo){
+
+            let c1 = this.#gameMap[Math.floor(gc[0]/3)][gc[0]-3*Math.floor(gc[0]/3)];
+            let c2 = this.#gameMap[Math.floor(gc[1]/3)][gc[1]-3*Math.floor(gc[1]/3)];
+            let c3 = this.#gameMap[Math.floor(gc[2]/3)][gc[2]-3*Math.floor(gc[2]/3)];
+
+            if(c1 != GameOptions.EMPTY_SIGN && c2 != GameOptions.EMPTY_SIGN && c3 != GameOptions.EMPTY_SIGN){
+
+                if(c1 = c2 = c3) return c1;
+            }
+        };
+
+        return -1;
     }
 
     #nextMove(){

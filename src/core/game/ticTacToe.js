@@ -49,11 +49,9 @@ class TicTacToe {
         [2,4,6]
     ];
 
+    #turn = GameOptions.PLAYER_SIGN;
+
     #playerStrategy = "A";
-
-    #playerMoves = [];
-
-    #aiMoves = [];
 
     #remainingMoves = [0,1,2,3,4,5,6,7,8];
 
@@ -138,8 +136,8 @@ class TicTacToe {
      */
     #handleClick(e){
 
-        let mouseX = e.clientX - this.#canvas.getBoundingClientRect().left;
-        let mouseY = e.clientY - this.#canvas.getBoundingClientRect().top;
+        let mouseX = e.clientY - this.#canvas.getBoundingClientRect().top;
+        let mouseY = e.clientX - this.#canvas.getBoundingClientRect().left;
 
         this.#playerCellX = Math.floor(mouseX/200);
         this.#playerCellY = Math.floor(mouseY/200);
@@ -166,23 +164,23 @@ class TicTacToe {
     #drawX(cordX,cordY){
 
         this.#drawingContext.moveTo(
-            BoardOptions.CELL_PADDING + cordX*BoardOptions.OFFSET + cordX*BoardOptions.CELL_WIDTH,
-            BoardOptions.CELL_PADDING + cordY*BoardOptions.OFFSET + cordY*BoardOptions.CELL_WIDTH
+            BoardOptions.CELL_PADDING + cordY*BoardOptions.OFFSET + cordY*BoardOptions.CELL_WIDTH,
+            BoardOptions.CELL_PADDING + cordX*BoardOptions.OFFSET + cordX*BoardOptions.CELL_WIDTH
         );
 
         this.#drawingContext.lineTo(
-            (cordX+1)*BoardOptions.CELL_WIDTH + cordX*BoardOptions.OFFSET - BoardOptions.CELL_PADDING,
-            (cordY+1)*BoardOptions.CELL_WIDTH + cordY*BoardOptions.OFFSET - BoardOptions.CELL_PADDING
+            (cordY+1)*BoardOptions.CELL_WIDTH + cordY*BoardOptions.OFFSET - BoardOptions.CELL_PADDING,
+            (cordX+1)*BoardOptions.CELL_WIDTH + cordX*BoardOptions.OFFSET - BoardOptions.CELL_PADDING
         );
         
         this.#drawingContext.moveTo(
-            (cordX+1)*BoardOptions.CELL_WIDTH + cordX*BoardOptions.OFFSET - BoardOptions.CELL_PADDING,
-            BoardOptions.CELL_PADDING + cordY*BoardOptions.OFFSET + cordY*BoardOptions.CELL_WIDTH
+            (cordY+1)*BoardOptions.CELL_WIDTH + cordY*BoardOptions.OFFSET - BoardOptions.CELL_PADDING,
+            BoardOptions.CELL_PADDING + cordX*BoardOptions.OFFSET + cordX*BoardOptions.CELL_WIDTH
         );
 
         this.#drawingContext.lineTo(
-            BoardOptions.CELL_PADDING + cordX*BoardOptions.OFFSET + cordX*BoardOptions.CELL_WIDTH,
-            (cordY+1)*BoardOptions.CELL_WIDTH + cordY*BoardOptions.OFFSET - BoardOptions.CELL_PADDING
+            BoardOptions.CELL_PADDING + cordY*BoardOptions.OFFSET + cordY*BoardOptions.CELL_WIDTH,
+            (cordX+1)*BoardOptions.CELL_WIDTH + cordX*BoardOptions.OFFSET - BoardOptions.CELL_PADDING
         );
     }
 
@@ -194,13 +192,13 @@ class TicTacToe {
     #drawO(cordX,cordY){
 
         this.#drawingContext.moveTo(
-            (2*cordX+1)*BoardOptions.CELL_CENTER+BoardOptions.RADUIS+cordX*BoardOptions.OFFSET,
-            (2*cordY+1)*BoardOptions.CELL_CENTER+cordY*BoardOptions.OFFSET
+            (2*cordY+1)*BoardOptions.CELL_CENTER+BoardOptions.RADUIS+cordY*BoardOptions.OFFSET,
+            (2*cordX+1)*BoardOptions.CELL_CENTER+cordX*BoardOptions.OFFSET
         );
 
         this.#drawingContext.arc(
-            (2*cordX+1)*BoardOptions.CELL_CENTER+cordX*BoardOptions.OFFSET,
             (2*cordY+1)*BoardOptions.CELL_CENTER+cordY*BoardOptions.OFFSET,
+            (2*cordX+1)*BoardOptions.CELL_CENTER+cordX*BoardOptions.OFFSET,
             BoardOptions.RADUIS,
             0,
             Math.PI*2
@@ -211,31 +209,32 @@ class TicTacToe {
      * @description
      */
     play(){
+
         switch(this.#playerStrategy){
 
             case "A":
 
-                this.#options.playerSign = "X";
-                
                 if(this.#canPlay(this.#playerCellX,this.#playerCellY)){
-        
+            
+                    this.#options.playerSign = "X";
+
                     this.#draw(this.#options.playerSign,this.#playerCellX,this.#playerCellY);
-                    this.#gameMap[this.#playerCellX][this.#playerCellY] = GameOptions.PLAYER_SIGN;
-                    this.#remainingMoves.splice(3*this.#playerCellX+this.#playerCellY,1);
-                }
-        
-                // let aiMove = this.#nextMove();
-        
-                // window.setTimeout(() => {
-        
-                //     if(this.#canPlay(aiMove.x,aiMove.y)){
+                    this.#gameMap[this.#playerCellX][this.#playerCellY] = GameOptions.PLAYER_SIGN;                    
+                    this.#reduceRemainingCell(3*this.#playerCellX+this.#playerCellY);
+                    
+                    let aiMove = this.#nextMove();
+                    
+                    window.setTimeout(() => {
                         
-                //         this.#draw("O",aiMove.x,aiMove.y);
-                //         this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
-                //         this.#remainingMoves.splice(3*aiMove.x+aiMove.y,1);
-                //     }
-        
-                // },1000);
+                        if(this.#canPlay(aiMove.x,aiMove.y)){
+                            
+                            this.#draw("O",aiMove.x,aiMove.y);
+                            this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
+                            this.#reduceRemainingCell(3*aiMove.x+aiMove.y);
+                        }
+                        
+                    },250);
+                }
 
             break;
 
@@ -244,12 +243,7 @@ class TicTacToe {
             break;
         }
 
-        if(this.#isWinnerExists() > 0){
-
-            this.#gameState = GameState.ENDING;
-            this.update();
-            return;
-        }
+        this.#handleGameEnding();
     }
 
     /**
@@ -266,13 +260,35 @@ class TicTacToe {
 
             if(c1 != GameOptions.EMPTY_SIGN && c2 != GameOptions.EMPTY_SIGN && c3 != GameOptions.EMPTY_SIGN){
 
-                if(c1 = c2 = c3) return c1;
+                if(c1 == c2 && c2 == c3) return c1;
             }
         };
 
         return -1;
     }
 
+    /**
+     * 
+     */
+    #handleGameEnding(){
+
+        window.setTimeout(()=>{
+  
+            if(this.#isWinnerExists() > 0){
+                
+                alert("winner : "+this.#isWinnerExists());
+                
+                this.#gameState = GameState.ENDING;
+                this.update();
+                return;
+            }
+        },250);
+    }
+
+    /**
+     * 
+     * @returns 
+     */
     #nextMove(){
 
         let cellNumber,x,y; 
@@ -281,9 +297,19 @@ class TicTacToe {
 
             case "A":
 
+                cellNumber = this.#remainingMoves[Math.floor(Math.random()*(this.#remainingMoves.length-1))];
+
+                x = Math.floor(cellNumber/3);
+                y = cellNumber - 3*x;
+
             break;
 
             case "D":
+
+                cellNumber = this.#remainingMoves[Math.floor(Math.random()*(this.#remainingMoves.length-1))];
+
+                x = Math.floor(cellNumber/3);
+                y = cellNumber - 3*x;
 
             break;
         }
@@ -292,6 +318,23 @@ class TicTacToe {
             x:x,
             y:y
         };
+    }
+
+    /**
+     * 
+     * @param {number} cellNumber 
+     * @returns 
+     */
+    #reduceRemainingCell(cellNumber){
+
+        let cellIndex = this.#remainingMoves.indexOf(cellNumber);
+
+        if(cellIndex >= 0){
+
+            this.#remainingMoves.splice(cellIndex,1);
+        }
+
+        return;
     }
 
     /**

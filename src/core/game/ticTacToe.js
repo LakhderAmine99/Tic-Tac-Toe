@@ -1,4 +1,5 @@
 import { GameState,BoardOptions,GameOptions } from './gameState.js';
+import { AISystemManager,DecisionTreeStrategy,RandomStrategy } from '../ai/@ai.index.js';
 
 /**
  * @module
@@ -49,7 +50,10 @@ class TicTacToe {
         [2,4,6]
     ];
 
-    #turn = GameOptions.PLAYER_SIGN;
+    /**
+     * @type {AISystemManager} #aiSystemManager
+     */
+    #aiSystemManager = null;
 
     #playerStrategy = "A";
 
@@ -68,6 +72,8 @@ class TicTacToe {
         this.#canvas = canvas;
         this.#drawingContext = this.#canvas.getContext('2d');
         this.#options = options;
+
+        this.#aiSystemManager = new AISystemManager(new RandomStrategy());
 
         BoardOptions.CELL_WIDTH = (this.#canvas.width/3) - BoardOptions.BORDER_WIDTH;
         BoardOptions.CELL_CENTER = BoardOptions.CELL_WIDTH/2;

@@ -1,6 +1,6 @@
 import AIStrategy from './aiStrategy/AIStrategy.js';
 
-class AISystemManager {
+export default class AISystemManager {
 
     /**
      * @type {AIStrategy} #strategy

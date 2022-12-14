@@ -7,9 +7,10 @@ export default class DecisionTreeStrategy extends AIStrategy {
     /**
      * 
      * @override
+     * @param {[[]]} board The current game board.
      * @returns 
      */
-    predictNextMove(){
+    predictNextMove(board){
         return;
     }
 }

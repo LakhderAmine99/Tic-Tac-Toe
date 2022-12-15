@@ -8,24 +8,17 @@ export default class AISystemManager {
     #strategy = null;
 
     /**
-     * @type {[[]]} #board
-     */
-    #board = null;
-
-    /**
      * 
      * @param {AIStrategy} strategy 
      */
-    constructor(strategy,board){
-
-        this.#strategy = strategy;
-        this.#board = board;
-    }
+    constructor(strategy){ this.#strategy = strategy; }
 
     /**
      * 
+     * @param {[[]]} board 
+     * @returns 
      */
-    predictNextMove(){ return this.#strategy.predictNextMove(this.#board); }
+    predictNextMove(board){ return this.#strategy.predictNextMove(board); }
 
     /**
      * 

@@ -1,4 +1,4 @@
-import { GameState,BoardOptions,GameOptions } from './gameState.js';
+import { GameState,BoardOptions,GameOptions,GameStrategies } from './gameState.js';
 import { AISystemManager,DecisionTreeStrategy,RandomStrategy } from '../ai/@ai.index.js';
 
 /**
@@ -55,7 +55,10 @@ class TicTacToe {
      */
     #aiSystemManager = null;
 
-    #playerStrategy = "A";
+    /**
+     * @type {number} The game strategy which the player follows.
+     */
+    #playerStrategy = GameStrategies.ATTACKING;
 
     #remainingMoves = [0,1,2,3,4,5,6,7,8];
 
@@ -218,7 +221,7 @@ class TicTacToe {
 
         switch(this.#playerStrategy){
 
-            case "A":
+            case GameStrategies.ATTACKING:
 
                 if(this.#canPlay(this.#playerCellX,this.#playerCellY)){
             
@@ -244,7 +247,7 @@ class TicTacToe {
 
             break;
 
-            case "D":
+            case GameStrategies.DEFENDING:
 
             break;
         }
@@ -301,13 +304,13 @@ class TicTacToe {
 
         switch(this.#playerStrategy){
 
-            case "A":
+            case GameStrategies.ATTACKING:
 
                 [x,y] = this.#aiSystemManager.predictNextMove(this.#gameMap);
 
             break;
 
-            case "D":
+            case GameStrategies.DEFENDING:
 
                 [x,y] = this.#aiSystemManager.predictNextMove(this.#gameMap);
 

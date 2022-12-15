@@ -1,4 +1,4 @@
-import { GameState,BoardOptions,GameOptions,GameStrategies } from './gameState.js';
+import { GameState,BoardOptions,GameOptions,GameStrategies,GameCombo } from './gameState.js';
 import { AISystemManager,DecisionTreeStrategy,RandomStrategy } from '../ai/@ai.index.js';
 
 /**
@@ -34,20 +34,6 @@ class TicTacToe {
         [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
         [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
         [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN]
-    ];
-
-    /**
-     * @type {[[]]} #gameCombo
-     */
-    #gameCombo = [
-        [0,1,2],
-        [0,3,6],
-        [0,4,8],
-        [3,4,5],
-        [1,4,7],
-        [2,5,8],
-        [6,7,8],
-        [2,4,6]
     ];
 
     /**
@@ -257,7 +243,7 @@ class TicTacToe {
      */
     #isWinnerExists(){
 
-        for(let gc of this.#gameCombo){
+        for(let gc of GameCombo){
 
             let c1 = this.#gameMap[Math.floor(gc[0]/3)][gc[0]-3*Math.floor(gc[0]/3)];
             let c2 = this.#gameMap[Math.floor(gc[1]/3)][gc[1]-3*Math.floor(gc[1]/3)];

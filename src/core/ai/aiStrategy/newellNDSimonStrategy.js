@@ -1,9 +1,13 @@
 import AIStrategy from './AIStrategy.js';
 import { GameOptions } from '../../game/gameState.js';
 
-class NewellNDSimonStrategy extends AIStrategy {
+export default class NewellNDSimonStrategy extends AIStrategy {
 
-    constructor(){}
+    /**
+     * 
+     * @constructor
+     */
+    constructor(){ super(); }
 
     /**
      * 
@@ -12,6 +16,9 @@ class NewellNDSimonStrategy extends AIStrategy {
      * @returns
      */
     predictNextMove(board){
-        return;
+
+        let x,y;
+
+        return [x,y];
     }
 }

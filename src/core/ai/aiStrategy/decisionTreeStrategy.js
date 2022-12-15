@@ -1,8 +1,13 @@
 import AIStrategy from "./AIStrategy.js";
+import { GameOptions } from "../../game/gameState.js";
 
 export default class DecisionTreeStrategy extends AIStrategy {
 
-    constructor(){}
+    /**
+     * 
+     * @constructor
+     */
+    constructor(){ super(); }
 
     /**
      * 
@@ -11,6 +16,9 @@ export default class DecisionTreeStrategy extends AIStrategy {
      * @returns 
      */
     predictNextMove(board){
-        return;
+
+        let x,y;
+
+        return [x,y];
     }
 }

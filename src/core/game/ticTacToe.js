@@ -297,29 +297,19 @@ class TicTacToe {
      */
     #nextMove(){
 
-        let cellNumber,x,y; 
+        let x,y; 
 
         switch(this.#playerStrategy){
 
             case "A":
 
-                // x,y = this.#aiSystemManager.predictNextMove(this.#gameMap);
-
-                cellNumber = this.#remainingMoves[Math.floor(Math.random()*(this.#remainingMoves.length-1))];
-
-                x = Math.floor(cellNumber/3);
-                y = cellNumber - 3*x;
+                [x,y] = this.#aiSystemManager.predictNextMove(this.#gameMap);
 
             break;
 
             case "D":
 
-                // x,y = this.#aiSystemManager.predictNextMove(this.#gameMap);
-
-                cellNumber = this.#remainingMoves[Math.floor(Math.random()*(this.#remainingMoves.length-1))];
-
-                x = Math.floor(cellNumber/3);
-                y = cellNumber - 3*x;
+                [x,y] = this.#aiSystemManager.predictNextMove(this.#gameMap);
 
             break;
         }

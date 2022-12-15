@@ -1,4 +1,5 @@
 import AIStrategy from './AIStrategy.js';
+import { GameOptions } from '../../game/gameState.js';
 
 class NewellNDSimonStrategy extends AIStrategy {
 

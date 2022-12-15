@@ -1,4 +1,4 @@
-import AIStrategy from './aiStrategy/AIStrategy.js';
+import AIStrategy from "../aiStrategy/AIStrategy.js";
 
 export default class AISystemManager {
 
@@ -16,7 +16,7 @@ export default class AISystemManager {
     /**
      * 
      * @param {[[]]} board 
-     * @returns 
+     * @returns {{}} A vector with the cell x and y cordinates.
      */
     predictNextMove(board){ return this.#strategy.predictNextMove(board); }
 

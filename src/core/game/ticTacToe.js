@@ -72,17 +72,17 @@ class TicTacToe {
         this.#canvas = canvas;
         this.#drawingContext = this.#canvas.getContext('2d');
         this.#options = options;
-
-        this.#aiSystemManager = new AISystemManager(new RandomStrategy());
-
+        
         BoardOptions.CELL_WIDTH = (this.#canvas.width/3) - BoardOptions.BORDER_WIDTH;
         BoardOptions.CELL_CENTER = BoardOptions.CELL_WIDTH/2;
         BoardOptions.CELL_PADDING = (BoardOptions.CELL_WIDTH - 2*BoardOptions.RADUIS)/2;
-
+        
         BoardOptions.OFFSET = (3/2)*BoardOptions.BORDER_WIDTH;
-
+        
         this.#initBoard();
         this.#initListeners();
+
+        this.#aiSystemManager = new AISystemManager(new RandomStrategy());
     }
 
     /**
@@ -303,6 +303,8 @@ class TicTacToe {
 
             case "A":
 
+                // x,y = this.#aiSystemManager.predictNextMove(this.#gameMap);
+
                 cellNumber = this.#remainingMoves[Math.floor(Math.random()*(this.#remainingMoves.length-1))];
 
                 x = Math.floor(cellNumber/3);
@@ -311,6 +313,8 @@ class TicTacToe {
             break;
 
             case "D":
+
+                // x,y = this.#aiSystemManager.predictNextMove(this.#gameMap);
 
                 cellNumber = this.#remainingMoves[Math.floor(Math.random()*(this.#remainingMoves.length-1))];
 

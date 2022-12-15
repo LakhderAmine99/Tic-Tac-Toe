@@ -1,4 +1,5 @@
 import AIStrategy from './AIStrategy.js';
+import { GameOptions } from '../../game/gameState.js';
 
 export default class RandomStrategy extends AIStrategy {
 
@@ -11,6 +12,14 @@ export default class RandomStrategy extends AIStrategy {
      * @returns 
      */
     predictNextMove(board){
-        return;
+
+        let x,y;
+
+        
+
+        return {
+            x:x,
+            y:y
+        };
     }
 }

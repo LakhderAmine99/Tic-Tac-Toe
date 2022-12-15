@@ -46,7 +46,14 @@ class TicTacToe {
      */
     #playerStrategy = GameStrategies.ATTACKING;
 
+    /**
+     * @type {number} #playerCellX
+     */
     #playerCellX;
+
+    /**
+     * @type {number} #playerCellY
+     */
     #playerCellY;
 
     /**

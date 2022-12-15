@@ -76,7 +76,7 @@ class TicTacToe {
         this.#initBoard();
         this.#initListeners();
 
-        this.#aiSystemManager = new AISystemManager(new RandomStrategy());
+        this.#aiSystemManager = new AISystemManager(new RandomStrategy(this.#getPlayerStrategy()));
     }
 
     /**
@@ -153,7 +153,7 @@ class TicTacToe {
      */
     #canPlay(cellX,cellY){
 
-        return this.#gameMap[cellX][cellY] == GameOptions.EMPTY_SIGN
+        return this.#gameMap[cellX][cellY] == GameOptions.EMPTY_SIGN;
     }
 
     /**
@@ -216,8 +216,6 @@ class TicTacToe {
 
                 if(this.#canPlay(this.#playerCellX,this.#playerCellY)){
             
-                    this.#options.playerSign = "X";
-
                     this.#draw(this.#options.playerSign,this.#playerCellX,this.#playerCellY);
                     this.#gameMap[this.#playerCellX][this.#playerCellY] = GameOptions.PLAYER_SIGN;                    
                     
@@ -227,7 +225,7 @@ class TicTacToe {
                         
                         if(this.#canPlay(aiMove.x,aiMove.y)){
                             
-                            this.#draw("O",aiMove.x,aiMove.y);
+                            this.#draw(this.#options.aiSign,aiMove.x,aiMove.y);
                             this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
                         }
                         
@@ -311,6 +309,15 @@ class TicTacToe {
             x:x,
             y:y
         };
+    }
+
+    /**
+     * 
+     * @returns The player strategy, either ATTACKING strategy or DEFENDING strategy.
+     */
+    #getPlayerStrategy(){
+
+        return this.#options.playerSign == "X" ? GameStrategies.ATTACKING : GameStrategies.DEFENDING;
     }
 
     /**

@@ -5,7 +5,8 @@
 }
 
 html,body{
-    background-color: black;
+    /* background-color: black; */
+    background-color: rgb(116, 82, 255);
     height: 100%;
 }
 
@@ -24,5 +25,6 @@ main{
 }
 
 canvas{
-    background-color: rgb(255, 255, 255);
+    /* background-color: rgb(255, 255, 255); */
+    background-color: rgb(116, 82, 255);
 }

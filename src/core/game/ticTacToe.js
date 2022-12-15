@@ -125,7 +125,7 @@ class TicTacToe {
             break;
         }
 
-        this.#drawingContext.lineWidth = 5;
+        this.#drawingContext.lineWidth = 10;
         this.#drawingContext.stroke();
 
         this.#drawingContext.closePath();

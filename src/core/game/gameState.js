@@ -21,3 +21,9 @@ export const GameOptions = {
     PLAYER_SIGN:1,
     AI_SIGN:2
 };
+
+export const GameStrategies = {
+
+    ATTACKING:0,
+    DEFENDING:1
+};

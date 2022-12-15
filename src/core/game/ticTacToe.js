@@ -60,8 +60,6 @@ class TicTacToe {
      */
     #playerStrategy = GameStrategies.ATTACKING;
 
-    #remainingMoves = [0,1,2,3,4,5,6,7,8];
-
     #playerCellX;
     #playerCellY;
 
@@ -229,7 +227,6 @@ class TicTacToe {
 
                     this.#draw(this.#options.playerSign,this.#playerCellX,this.#playerCellY);
                     this.#gameMap[this.#playerCellX][this.#playerCellY] = GameOptions.PLAYER_SIGN;                    
-                    this.#reduceRemainingCell(3*this.#playerCellX+this.#playerCellY);
                     
                     let aiMove = this.#nextMove();
                     
@@ -239,7 +236,6 @@ class TicTacToe {
                             
                             this.#draw("O",aiMove.x,aiMove.y);
                             this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
-                            this.#reduceRemainingCell(3*aiMove.x+aiMove.y);
                         }
                         
                     },250);
@@ -291,6 +287,7 @@ class TicTacToe {
                 this.update();
                 return;
             }
+            
         },250);
     }
 
@@ -324,29 +321,10 @@ class TicTacToe {
     }
 
     /**
-     * 
-     * @param {number} cellNumber 
-     * @returns 
-     */
-    #reduceRemainingCell(cellNumber){
-
-        let cellIndex = this.#remainingMoves.indexOf(cellNumber);
-
-        if(cellIndex >= 0){
-
-            this.#remainingMoves.splice(cellIndex,1);
-        }
-
-        return;
-    }
-
-    /**
      * @description
      */
     update(){
     
-        // update the game state.
-
         switch(this.#gameState){
 
             case GameState.PLAYING:

@@ -85,7 +85,7 @@ class TicTacToe {
     #initBoard(){
 
         this.#drawingContext.beginPath();
-
+        
         this.#drawingContext.fillRect(0,this.#canvas.height/3 - 10,this.#canvas.width,10);
         this.#drawingContext.fillRect(0,2*this.#canvas.height/3,this.#canvas.width,10);
 
@@ -108,14 +108,21 @@ class TicTacToe {
         switch(shape){
 
             case 'O':
+
+                this.#drawingContext.strokeStyle = "#000";
                 this.#drawO(cordX,cordY);
+
             break;
-            
+                
             case 'X':
+
+                this.#drawingContext.strokeStyle = "#FFF";
                 this.#drawX(cordX,cordY);
+
             break;
         }
 
+        this.#drawingContext.lineCap = "round";
         this.#drawingContext.lineWidth = 10;
         this.#drawingContext.stroke();
 

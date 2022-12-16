@@ -28,14 +28,10 @@ export default class NewellNDSimonStrategy extends AIStrategy {
      */
     predictNextMove(board){
 
-        let x,y;
+        let cords;
         let cellNumber;
 
-        if(!this.#started){
-
-            this.#remainingCells = this.#getRemainingCellsFromBoard(board);
-            this.#started = true;
-        }
+        this.#remainingCells = this.#getRemainingCellsFromBoard(board);
 
         // choose which strategy is used in the game,
         // if the ai is attacking which means that the ai player is the one who plays first, then we need
@@ -52,11 +48,11 @@ export default class NewellNDSimonStrategy extends AIStrategy {
 
                 if(cellNumber >= 0){
 
-                    [x,y] = this.#getCordsFromCell(cellNumber);
+                    cords = this.#getCordsFromCell(cellNumber);
 
                 }else{
 
-                    [x,y] = this.#getCordsFromCell(this.#getRandomCellNumber());
+                    cords = this.#getCordsFromCell(this.#getRandomCellNumber());
                 }
 
             break;
@@ -67,24 +63,30 @@ export default class NewellNDSimonStrategy extends AIStrategy {
 
                 if(cellNumber >= 0){
 
-                    [x,y] = this.#getCordsFromCell(cellNumber);
+                    cords = this.#getCordsFromCell(cellNumber);
 
                 }else{
 
-                    [x,y] = this.#getCordsFromCell(this.#getRandomCellNumber());
+                    cords = this.#getCordsFromCell(this.#getRandomCellNumber());
                 }
                 
             break;
         }
 
-        return [x,y];
+        return [cords.x,cords.y];
     }
 
     /**
      * 
      * @param {number} cellNumber 
      */
-    #getCordsFromCell(cellNumber){ return [Math.floor(cellNumber/3),cellNumber - 3*x]; }
+    #getCordsFromCell(cellNumber){ 
+        
+        return {
+            x:Math.floor(cellNumber/3),
+            y:cellNumber - 3*Math.floor(cellNumber/3)
+        };
+    }
 
     /**
      * If there's a winning move return the cell number, otherwise return -1.
@@ -125,13 +127,6 @@ export default class NewellNDSimonStrategy extends AIStrategy {
 
         let cellNumber = this.#remainingCells[Math.floor(Math.random()*this.#remainingCells.length)];
 
-        let cellIndex = this.#remainingCells.indexOf(cellNumber);
-
-        if(cellIndex >= 0){
-
-            this.#remainingCells.splice(cellIndex,1);
-        }
-
-        return this.#getCordsFromCell(cellNumber);
+        return cellNumber;
     }
 }

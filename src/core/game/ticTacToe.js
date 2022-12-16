@@ -1,5 +1,5 @@
 import { GameState,BoardOptions,GameOptions,GameStrategies,GameCombo } from './gameState.js';
-import { AISystemManager,DecisionTreeStrategy,RandomStrategy } from '../ai/@ai.index.js';
+import { AISystemManager,DecisionTreeStrategy,RandomStrategy,NewellNDSimonStrategy } from '../ai/@ai.index.js';
 
 /**
  * @module
@@ -93,7 +93,7 @@ class TicTacToe {
         this.#initBoard();
         this.#initListeners();
 
-        this.#aiSystemManager = new AISystemManager(new RandomStrategy(this.#getPlayerStrategy()));
+        this.#aiSystemManager = new AISystemManager(new NewellNDSimonStrategy(this.#getPlayerStrategy()));
     }
 
     /**

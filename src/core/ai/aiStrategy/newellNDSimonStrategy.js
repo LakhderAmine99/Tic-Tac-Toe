@@ -6,8 +6,9 @@ export default class NewellNDSimonStrategy extends AIStrategy {
     /**
      * 
      * @constructor
+     * @param {number} playerStrategy
      */
-    constructor(){ super(); }
+    constructor(playerStrategy){ super(playerStrategy); }
 
     /**
      * 

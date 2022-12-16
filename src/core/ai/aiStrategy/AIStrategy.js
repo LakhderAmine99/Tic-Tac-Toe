@@ -7,9 +7,18 @@
  */
 export default class AIStrategy {
 
-    constructor(){ 
+    /**
+     * @type {number} #playerStrategy
+     */
+    #playerStrategy;
+
+    /**
+     * 
+     * @param {number} playerStrategy 
+     */
+    constructor(playerStrategy){ 
         
-        // throw new Error("Exception : cannot instanciate an abstract class."); 
+        this.#playerStrategy = playerStrategy;
     }
 
     /**
@@ -20,4 +29,14 @@ export default class AIStrategy {
      * @returns {[]} A vector with the cell x and y cordinates.
      */
     predictNextMove(board){}
+
+    /**
+     * @param {number} value
+     */
+    set playerStrategy(value){ this.#playerStrategy = value;  }
+
+    /**
+     * @returns {number} The player strategy either ATTACKING or DEFENDING.
+     */
+    get playerStrategy(){ return this.#playerStrategy; }
 }

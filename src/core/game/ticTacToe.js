@@ -61,6 +61,8 @@ class TicTacToe {
      */
     #playerStrategy;
 
+    #winner = -1;
+
     /**
      * 
      * @param {HTMLCanvasElement} canvas 
@@ -277,7 +279,11 @@ class TicTacToe {
 
             if(c1 != GameOptions.EMPTY_SIGN && c2 != GameOptions.EMPTY_SIGN && c3 != GameOptions.EMPTY_SIGN){
 
-                if(c1 == c2 && c2 == c3) return c1;
+                if(c1 == c2 && c2 == c3){
+
+                    this.#winner = c1;
+                    return this.#winner;
+                } 
             }
         };
 
@@ -293,7 +299,7 @@ class TicTacToe {
 
             if(this.#isWinnerExists() > 0){
                 
-                alert("winner : "+this.#isWinnerExists());
+                alert("winner : "+this.#winner);
                 
                 this.#gameState = GameState.ENDING;
                 this.update();

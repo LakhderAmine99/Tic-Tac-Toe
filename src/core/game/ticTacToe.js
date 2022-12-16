@@ -42,11 +42,6 @@ class TicTacToe {
     #aiSystemManager = null;
 
     /**
-     * @type {number} The game strategy which the player follows.
-     */
-    #playerStrategy = GameStrategies.ATTACKING;
-
-    /**
      * @type {number} #playerCellX
      */
     #playerCellX;
@@ -55,6 +50,16 @@ class TicTacToe {
      * @type {number} #playerCellY
      */
     #playerCellY;
+
+    /**
+     * @type {number} #emptyCells
+     */
+    #emptyCells = 9;
+
+    /**
+     * @type {number} #playerStrategy
+     */
+    #playerStrategy;
 
     /**
      * 
@@ -77,6 +82,8 @@ class TicTacToe {
         this.#initListeners();
 
         this.#aiSystemManager = new AISystemManager(new RandomStrategy(this.#getPlayerStrategy()));
+
+        this.update();
     }
 
     /**
@@ -160,6 +167,8 @@ class TicTacToe {
      */
     #canPlay(cellX,cellY){
 
+        if(cellX == undefined || cellY == undefined || isNaN(cellX) || isNaN(cellY)) return false;
+
         return this.#gameMap[cellX][cellY] == GameOptions.EMPTY_SIGN;
     }
 
@@ -222,21 +231,26 @@ class TicTacToe {
             case GameStrategies.ATTACKING:
 
                 if(this.#canPlay(this.#playerCellX,this.#playerCellY)){
-            
+                    
                     this.#draw(this.#options.playerSign,this.#playerCellX,this.#playerCellY);
-                    this.#gameMap[this.#playerCellX][this.#playerCellY] = GameOptions.PLAYER_SIGN;                    
+                    this.#gameMap[this.#playerCellX][this.#playerCellY] = GameOptions.PLAYER_SIGN;    
                     
-                    let aiMove = this.#nextMove();
-                    
-                    window.setTimeout(() => {
+                    if(this.#isWinnerExists() < 0){
                         
-                        if(this.#canPlay(aiMove.x,aiMove.y)){
-                            
-                            this.#draw(this.#options.aiSign,aiMove.x,aiMove.y);
-                            this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
-                        }
+                        let aiMove = this.#nextMove();
                         
-                    },250);
+                        window.setTimeout(() => {
+                                
+                            if(this.#canPlay(aiMove.x,aiMove.y)){
+                                        
+                                this.#draw(this.#options.aiSign,aiMove.x,aiMove.y);
+                                this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
+                            }
+                        
+                        },250);
+
+                        this.#emptyCells -= 2;
+                    }
                 }
 
             break;
@@ -276,7 +290,7 @@ class TicTacToe {
     #handleGameEnding(){
 
         window.setTimeout(()=>{
-  
+
             if(this.#isWinnerExists() > 0){
                 
                 alert("winner : "+this.#isWinnerExists());
@@ -285,7 +299,7 @@ class TicTacToe {
                 this.update();
                 return;
             }
-            
+                
         },250);
     }
 
@@ -297,20 +311,7 @@ class TicTacToe {
 
         let x,y; 
 
-        switch(this.#playerStrategy){
-
-            case GameStrategies.ATTACKING:
-
-                [x,y] = this.#aiSystemManager.predictNextMove(this.#gameMap);
-
-            break;
-
-            case GameStrategies.DEFENDING:
-
-                [x,y] = this.#aiSystemManager.predictNextMove(this.#gameMap);
-
-            break;
-        }
+        [x,y] = this.#aiSystemManager.predictNextMove(this.#gameMap);
 
         return {
             x:x,
@@ -324,7 +325,9 @@ class TicTacToe {
      */
     #getPlayerStrategy(){
 
-        return this.#options.playerSign == "X" ? GameStrategies.ATTACKING : GameStrategies.DEFENDING;
+        this.#playerStrategy = this.#options.playerSign == "X" ? GameStrategies.ATTACKING : GameStrategies.DEFENDING;
+
+        return this.#playerStrategy;
     }
 
     /**

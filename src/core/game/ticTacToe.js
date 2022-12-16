@@ -25,7 +25,7 @@ class TicTacToe {
     /**
      * @type {number} #gameState
      */
-    #gameState = GameState.PLAYING;
+    #gameState = GameState.STARTING;
 
     /**
      * @type {[[]]} #gameMap
@@ -80,12 +80,20 @@ class TicTacToe {
         
         BoardOptions.OFFSET = (3/2)*BoardOptions.BORDER_WIDTH;
         
+        this.#init();
+
+        this.update();
+    }
+
+    /**
+     * @description Init the game state and everything else.
+     */
+    #init(){
+
         this.#initBoard();
         this.#initListeners();
 
         this.#aiSystemManager = new AISystemManager(new RandomStrategy(this.#getPlayerStrategy()));
-
-        this.update();
     }
 
     /**
@@ -258,6 +266,41 @@ class TicTacToe {
             break;
 
             case GameStrategies.DEFENDING:
+                
+                if(this.#gameState == GameState.STARTING){
+
+                    let aiMove = this.#nextMove(); 
+                                        
+                    this.#draw(this.#options.aiSign,aiMove.x,aiMove.y);
+                    this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
+
+                    this.#gameState = GameState.PLAYING;
+
+                }else{
+
+                    if(this.#canPlay(this.#playerCellX,this.#playerCellY)){
+
+                        this.#draw(this.#options.playerSign,this.#playerCellX,this.#playerCellY);
+                        this.#gameMap[this.#playerCellX][this.#playerCellY] = GameOptions.PLAYER_SIGN;
+                        
+                        if(this.#isWinnerExists() < 0){
+                            
+                            let aiMove = this.#nextMove();  
+                            
+                            window.setTimeout(() => {
+                                
+                                if(this.#canPlay(aiMove.x,aiMove.y)){
+                                    
+                                    this.#draw(this.#options.aiSign,aiMove.x,aiMove.y);
+                                    this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
+                                }
+                                
+                            },250);
+                        }
+                        
+                        this.#emptyCells -= 2;
+                    }
+                }
 
             break;
         }
@@ -343,6 +386,10 @@ class TicTacToe {
     
         switch(this.#gameState){
 
+            case GameState.STARTING:
+                this.play();
+            break;
+            
             case GameState.PLAYING:
                 this.play();
             break;

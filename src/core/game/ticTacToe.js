@@ -236,73 +236,40 @@ class TicTacToe {
      */
     play(){
 
-        switch(this.#playerStrategy){
+        if(this.#playerStrategy == GameStrategies.ATTACKING && this.#gameState == GameState.STARTING)
+            this.#gameState = GameState.PLAYING;
 
-            case GameStrategies.ATTACKING:
+        if(this.#gameState == GameState.STARTING){
 
-                if(this.#canPlay(this.#playerCellX,this.#playerCellY)){
-                    
-                    this.#draw(this.#options.playerSign,this.#playerCellX,this.#playerCellY);
-                    this.#gameMap[this.#playerCellX][this.#playerCellY] = GameOptions.PLAYER_SIGN;    
-                    
-                    if(this.#isWinnerExists() < 0){
-                        
-                        let aiMove = this.#nextMove();
-                        
-                        window.setTimeout(() => {
+            let aiMove = this.#nextMove();
                                 
-                            if(this.#canPlay(aiMove.x,aiMove.y)){
-                                        
-                                this.#draw(this.#options.aiSign,aiMove.x,aiMove.y);
-                                this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
-                            }
-                        
-                        },250);
+            this.#draw(this.#options.aiSign,aiMove.x,aiMove.y);
+            this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
 
-                        this.#emptyCells -= 2;
-                    }
-                }
+        }else{
 
-            break;
+            if(this.#canPlay(this.#playerCellX,this.#playerCellY)){
 
-            case GameStrategies.DEFENDING:
+                this.#draw(this.#options.playerSign,this.#playerCellX,this.#playerCellY);
+                this.#gameMap[this.#playerCellX][this.#playerCellY] = GameOptions.PLAYER_SIGN;
                 
-                if(this.#gameState == GameState.STARTING){
-
-                    let aiMove = this.#nextMove(); 
-                                        
-                    this.#draw(this.#options.aiSign,aiMove.x,aiMove.y);
-                    this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
-
-                    this.#gameState = GameState.PLAYING;
-
-                }else{
-
-                    if(this.#canPlay(this.#playerCellX,this.#playerCellY)){
-
-                        this.#draw(this.#options.playerSign,this.#playerCellX,this.#playerCellY);
-                        this.#gameMap[this.#playerCellX][this.#playerCellY] = GameOptions.PLAYER_SIGN;
+                if(this.#isWinnerExists() < 0){
+                    
+                    let aiMove = this.#nextMove();  
+                    
+                    window.setTimeout(() => {
                         
-                        if(this.#isWinnerExists() < 0){
+                        if(this.#canPlay(aiMove.x,aiMove.y)){
                             
-                            let aiMove = this.#nextMove();  
-                            
-                            window.setTimeout(() => {
-                                
-                                if(this.#canPlay(aiMove.x,aiMove.y)){
-                                    
-                                    this.#draw(this.#options.aiSign,aiMove.x,aiMove.y);
-                                    this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
-                                }
-                                
-                            },250);
+                            this.#draw(this.#options.aiSign,aiMove.x,aiMove.y);
+                            this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
                         }
                         
-                        this.#emptyCells -= 2;
-                    }
+                    },250);
                 }
-
-            break;
+                
+                this.#emptyCells -= 2;
+            }
         }
 
         this.#handleGameEnding();
@@ -388,6 +355,7 @@ class TicTacToe {
 
             case GameState.STARTING:
                 this.play();
+                this.#gameState = GameState.PLAYING;
             break;
             
             case GameState.PLAYING:

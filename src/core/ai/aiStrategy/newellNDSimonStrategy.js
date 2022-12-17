@@ -33,59 +33,26 @@ export default class NewellNDSimonStrategy extends AIStrategy {
 
         this.#remainingCells = this.#getRemainingCellsFromBoard(board);
 
-        // choose which strategy is used in the game,
-        // if the ai is attacking which means that the ai player is the one who plays first, then we need
-        // to check if there's a possible win for the ai, if so we will ruturn the cell which will make the ai win.
-        // otherwise if the ai is defending, which means that the ai is trying to block the real player of winning the game,
-        // in this case we will check if there's a possibl win for the real player if so the ai will block that line,
-        // or that column for preventing the player of winning the game
-
         switch(this.playerStrategy){
 
             case GameStrategies.ATTACKING:
 
                 cellNumber = this.#winningMoveExists(board,GameOptions.PLAYER_SIGN);
 
-                if(cellNumber >= 0){
-
-                    cords = this.#getCordsFromCell(cellNumber);
-
-                }else{
-
-                    cords = this.#getCordsFromCell(this.#getRandomCellNumber());
-                }
+                cords = this.#getCordsFromCell(cellNumber >= 0 ? cellNumber : this.#getRandomCellNumber());
 
             break;
 
             case GameStrategies.DEFENDING:
 
                 cellNumber = this.#winningMoveExists(board,GameOptions.AI_SIGN);
-
-                if(cellNumber >= 0){
-
-                    cords = this.#getCordsFromCell(cellNumber);
-
-                }else{
-
-                    cords = this.#getCordsFromCell(this.#getRandomCellNumber());
-                }
+                
+                cords = this.#getCordsFromCell(cellNumber >= 0 ? cellNumber : this.#getRandomCellNumber());
                 
             break;
         }
 
         return [cords.x,cords.y];
-    }
-
-    /**
-     * 
-     * @param {number} cellNumber 
-     */
-    #getCordsFromCell(cellNumber){ 
-        
-        return {
-            x:Math.floor(cellNumber/3),
-            y:cellNumber - 3*Math.floor(cellNumber/3)
-        };
     }
 
     /**
@@ -108,12 +75,7 @@ export default class NewellNDSimonStrategy extends AIStrategy {
 
             if(this.#hasTwo(row,playerSign)){
 
-                let emptyCellIndex = row.indexOf(GameOptions.EMPTY_SIGN);
-
-                let x = Math.floor(gc[emptyCellIndex]/3);
-                let y = gc[emptyCellIndex] - 3*Math.floor(gc[emptyCellIndex]/3);
-
-                return 3*x+y;
+                return gc[row.indexOf(GameOptions.EMPTY_SIGN)];
             }
         }
 
@@ -164,8 +126,19 @@ export default class NewellNDSimonStrategy extends AIStrategy {
      */
     #getRandomCellNumber(){
 
-        let cellNumber = this.#remainingCells[Math.floor(Math.random()*this.#remainingCells.length)];
+        return this.#remainingCells[Math.floor(Math.random()*this.#remainingCells.length)];
+    }
 
-        return cellNumber;
+    /**
+     * 
+     * @param {number} cellNumber 
+     * @returns 
+     */
+    #getCordsFromCell(cellNumber){ 
+        
+        return {
+            x:Math.floor(cellNumber/3),
+            y:cellNumber - 3*Math.floor(cellNumber/3)
+        };
     }
 }

@@ -1,5 +1,5 @@
 import AIStrategy from './AIStrategy.js';
-import { GameOptions, GameStrategies } from '../../game/gameState.js';
+import { GameCombo, GameOptions, GameStrategies } from '../../game/gameState.js';
 
 export default class NewellNDSimonStrategy extends AIStrategy {
 
@@ -44,7 +44,7 @@ export default class NewellNDSimonStrategy extends AIStrategy {
 
             case GameStrategies.ATTACKING:
 
-                cellNumber = this.#winningMoveExists(GameOptions.PLAYER_SIGN);
+                cellNumber = this.#winningMoveExists(board,GameOptions.PLAYER_SIGN);
 
                 if(cellNumber >= 0){
 
@@ -59,7 +59,7 @@ export default class NewellNDSimonStrategy extends AIStrategy {
 
             case GameStrategies.DEFENDING:
 
-                cellNumber = this.#winningMoveExists(GameOptions.AI_SIGN);
+                cellNumber = this.#winningMoveExists(board,GameOptions.AI_SIGN);
 
                 if(cellNumber >= 0){
 
@@ -91,12 +91,51 @@ export default class NewellNDSimonStrategy extends AIStrategy {
     /**
      * If there's a winning move return the cell number, otherwise return -1.
      * 
+     * @param {[[]]} board A 3x3 matrix. 
      * @param {number} playerSign A numeric expression. 
      * @returns {number}
      */
-    #winningMoveExists(playerSign){
+    #winningMoveExists(board,playerSign){
+
+        for(let gc of GameCombo){
+
+            let row = [
+
+                board[Math.floor(gc[0]/3)][gc[0] - 3*Math.floor(gc[0]/3)],
+                board[Math.floor(gc[1]/3)][gc[1] - 3*Math.floor(gc[1]/3)],
+                board[Math.floor(gc[2]/3)][gc[2] - 3*Math.floor(gc[2]/3)]
+            ];
+
+            if(this.#hasTwo(row,playerSign)){
+
+                let emptyCellIndex = row.indexOf(GameOptions.EMPTY_SIGN);
+
+                let x = Math.floor(gc[emptyCellIndex]/3);
+                let y = gc[emptyCellIndex] - 3*Math.floor(gc[emptyCellIndex]/3);
+
+                return 3*x+y;
+            }
+        }
 
         return -1;
+    }
+
+    /**
+     * 
+     * @param {[]} row A numeric array.
+     * @param {number} playerSign A numeric expression. 
+     */
+    #hasTwo(row,playerSign){
+
+        if(!row.includes(GameOptions.EMPTY_SIGN)) return false;
+
+        let counter = 0;
+
+        row.forEach(cell => { if(cell == playerSign) counter++; });
+
+        if(counter == 2) return true;
+
+        return false;
     }
 
     /**

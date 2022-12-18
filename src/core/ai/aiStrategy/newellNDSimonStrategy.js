@@ -1,5 +1,5 @@
 import AIStrategy from './AIStrategy.js';
-import { GameCombo, GameOptions, GameState, GameStrategies } from '../../game/gameState.js';
+import { GameCombo, GameOptions, GameState } from '../../game/gameState.js';
 
 export default class NewellNDSimonStrategy extends AIStrategy {
 
@@ -11,7 +11,6 @@ export default class NewellNDSimonStrategy extends AIStrategy {
     /**
      * 
      * @constructor
-     * @param {number} gameState
      */
     constructor(){ super(); }
 

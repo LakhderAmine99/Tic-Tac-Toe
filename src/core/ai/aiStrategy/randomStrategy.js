@@ -6,9 +6,8 @@ export default class RandomStrategy extends AIStrategy {
     /**
      * 
      * @constructor
-     * @param {number} gameState
      */
-    constructor(gameState){ super(gameState); }
+    constructor(){ super(); }
     
     /**
      * 

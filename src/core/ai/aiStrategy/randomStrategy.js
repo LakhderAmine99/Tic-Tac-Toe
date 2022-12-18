@@ -6,17 +6,18 @@ export default class RandomStrategy extends AIStrategy {
     /**
      * 
      * @constructor
-     * @param {number} playerStrategy
+     * @param {number} gameState
      */
-    constructor(playerStrategy){ super(playerStrategy); }
+    constructor(gameState){ super(gameState); }
     
     /**
      * 
      * @override
      * @param {[[]]} board The current game board.
+     * @param {number} state The current game state.
      * @returns 
      */
-    predictNextMove(board){
+    predictNextMove(board,state){
 
         let x,y;
         let emptyCells = this.#getEmptyCells(board);

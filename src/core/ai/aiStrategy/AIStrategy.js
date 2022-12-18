@@ -26,9 +26,10 @@ export default class AIStrategy {
      * @abstract
      * @virtual
      * @param {[[]]} board The current game board.
+     * @param {number} state The current game state.
      * @returns {[]} A vector with the cell x and y cordinates.
      */
-    predictNextMove(board){}
+    predictNextMove(board,state){}
 
     /**
      * @param {number} value

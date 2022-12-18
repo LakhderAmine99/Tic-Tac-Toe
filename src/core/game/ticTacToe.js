@@ -57,9 +57,9 @@ class TicTacToe {
     #emptyCells = 9;
 
     /**
-     * @type {number} #playerStrategy
+     * @type {number} #playTurn
      */
-    #playerStrategy;
+    #playTurn;
 
     #winner = -1;
 
@@ -93,7 +93,10 @@ class TicTacToe {
         this.#initBoard();
         this.#initListeners();
 
-        this.#aiSystemManager = new AISystemManager(new NewellNDSimonStrategy(this.#getPlayerStrategy()));
+        this.#playTurn = this.#options.playerSign == "X" ? GameOptions.PLAYER_SIGN : GameOptions.AI_SIGN;
+                
+        this.#aiSystemManager = new AISystemManager(new NewellNDSimonStrategy(this.#getGameState()));
+        this.#aiSystemManager.setGameState(this.#gameState);
     }
 
     /**
@@ -236,15 +239,20 @@ class TicTacToe {
      */
     play(){
 
-        if(this.#playerStrategy == GameStrategies.ATTACKING && this.#gameState == GameState.STARTING)
+        if(this.#playTurn == GameOptions.PLAYER_SIGN && this.#gameState == GameState.STARTING){
+
             this.#gameState = GameState.PLAYING;
-
+            this.#aiSystemManager.setGameState(this.#gameState);
+        }
+        
         if(this.#gameState == GameState.STARTING){
-
+            
             let aiMove = this.#nextMove();
                                 
             this.#draw(this.#options.aiSign,aiMove.x,aiMove.y);
             this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
+
+            this.#aiSystemManager.setGameState(GameState.PLAYING);
 
         }else{
 
@@ -312,6 +320,7 @@ class TicTacToe {
                 alert("winner : "+this.#winner);
                 
                 this.#gameState = GameState.ENDING;
+                this.#aiSystemManager.setGameState(this.#gameState);
                 this.update();
                 return;
             }
@@ -337,13 +346,11 @@ class TicTacToe {
 
     /**
      * 
-     * @returns The player strategy, either ATTACKING strategy or DEFENDING strategy.
+     * @returns The current game state.
      */
-    #getPlayerStrategy(){
+    #getGameState(){
 
-        this.#playerStrategy = this.#options.playerSign == "X" ? GameStrategies.ATTACKING : GameStrategies.DEFENDING;
-
-        return this.#playerStrategy;
+        return this.#gameState;
     }
 
     /**

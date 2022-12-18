@@ -9,11 +9,6 @@ export default class NewellNDSimonStrategy extends AIStrategy {
     #remainingCells = [];
 
     /**
-     * @type {boolean} #started
-     */
-    #started = false;
-
-    /**
      * 
      * @constructor
      * @param {number} gameState
@@ -24,17 +19,18 @@ export default class NewellNDSimonStrategy extends AIStrategy {
      * 
      * @override
      * @param {[[]]} board The current game board.
+     * @param {number} state The current game state.
      * @returns
      */
-    predictNextMove(board){
+    predictNextMove(board,state){
 
         let cords;
         let cellNumber;
 
         this.#remainingCells = this.#getRemainingCellsFromBoard(board);
 
-        switch(this.gameState){
-
+        switch(state){
+            
             case GameState.STARTING:
 
                 cords = this.#getCordsFromCell(this.#getCenterCellNumber(board));
@@ -51,7 +47,12 @@ export default class NewellNDSimonStrategy extends AIStrategy {
 
                     if(cellNumber < 0){
 
-                        cellNumber =  this.#getRandomCellNumber();
+                        cellNumber =  this.#getSomeCornerCellNumber(board);
+
+                        if(cellNumber < 0){
+
+                            cellNumber =  this.#getRandomCellNumber();
+                        }
                     }
                 }
 
@@ -95,7 +96,10 @@ export default class NewellNDSimonStrategy extends AIStrategy {
      * @param {[[]]} board 
      * @returns 
      */
-    #getCenterCellNumber(board){ return 4; }
+    #getCenterCellNumber(board){ 
+
+        return board[1][1] == GameOptions.EMPTY_SIGN ? 4 : -1
+    }
 
     /**
      * 
@@ -115,6 +119,8 @@ export default class NewellNDSimonStrategy extends AIStrategy {
         
         if(board[2][2] == GameOptions.EMPTY_SIGN)
             return 8;
+
+        return -1;
     }
 
     /**

@@ -8,6 +8,11 @@ export default class AISystemManager {
     #strategy = null;
 
     /**
+     * @type {number} #state
+     */
+    #gameState = null;
+
+    /**
      * 
      * @param {AIStrategy} strategy 
      */
@@ -18,11 +23,17 @@ export default class AISystemManager {
      * @param {[[]]} board 
      * @returns {{}} A vector with the cell x and y cordinates.
      */
-    predictNextMove(board){ return this.#strategy.predictNextMove(board); }
+    predictNextMove(board){ return this.#strategy.predictNextMove(board,this.#gameState); }
 
     /**
      * 
      * @param {AIStrategy} strategy 
      */
     setAIStrategy(strategy){ this.#strategy = strategy; }
+
+    /**
+     * 
+     * @param {number} state 
+     */
+    setGameState(state){ this.#gameState = state; }
 }

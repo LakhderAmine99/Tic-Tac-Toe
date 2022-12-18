@@ -22,12 +22,6 @@ export const GameOptions = {
     AI_SIGN:2
 };
 
-export const GameStrategies = {
-
-    ATTACKING:0,
-    DEFENDING:1
-};
-
 export const GameCombo = [
     [0,1,2],
     [0,3,6],

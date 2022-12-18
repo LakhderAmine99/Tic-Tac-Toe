@@ -1,4 +1,4 @@
-import { GameState,BoardOptions,GameOptions,GameStrategies,GameCombo } from './gameState.js';
+import { GameState,BoardOptions,GameOptions,GameCombo } from './gameState.js';
 import { AISystemManager,DecisionTreeStrategy,RandomStrategy,NewellNDSimonStrategy } from '../ai/@ai.index.js';
 
 /**
@@ -52,15 +52,13 @@ class TicTacToe {
     #playerCellY;
 
     /**
-     * @type {number} #emptyCells
-     */
-    #emptyCells = 9;
-
-    /**
      * @type {number} #playTurn
      */
     #playTurn;
 
+    /**
+     * @type {number} #winner
+     */
     #winner = -1;
 
     /**

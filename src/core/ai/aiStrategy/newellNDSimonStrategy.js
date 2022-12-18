@@ -1,5 +1,5 @@
 import AIStrategy from './AIStrategy.js';
-import { GameCombo, GameOptions, GameStrategies } from '../../game/gameState.js';
+import { GameCombo, GameOptions, GameState, GameStrategies } from '../../game/gameState.js';
 
 export default class NewellNDSimonStrategy extends AIStrategy {
 
@@ -16,9 +16,9 @@ export default class NewellNDSimonStrategy extends AIStrategy {
     /**
      * 
      * @constructor
-     * @param {number} playerStrategy
+     * @param {number} gameState
      */
-    constructor(playerStrategy){ super(playerStrategy); }
+    constructor(){ super(); }
 
     /**
      * 
@@ -33,22 +33,30 @@ export default class NewellNDSimonStrategy extends AIStrategy {
 
         this.#remainingCells = this.#getRemainingCellsFromBoard(board);
 
-        switch(this.playerStrategy){
+        switch(this.gameState){
 
-            case GameStrategies.ATTACKING:
+            case GameState.STARTING:
 
-                cellNumber = this.#winningMoveExists(board,GameOptions.PLAYER_SIGN);
-
-                cords = this.#getCordsFromCell(cellNumber >= 0 ? cellNumber : this.#getRandomCellNumber());
+                cords = this.#getCordsFromCell(this.#getCenterCellNumber(board));
 
             break;
 
-            case GameStrategies.DEFENDING:
+            case GameState.PLAYING:
 
                 cellNumber = this.#winningMoveExists(board,GameOptions.AI_SIGN);
-                
-                cords = this.#getCordsFromCell(cellNumber >= 0 ? cellNumber : this.#getRandomCellNumber());
-                
+
+                if(cellNumber < 0){
+
+                    cellNumber = this.#winningMoveExists(board,GameOptions.PLAYER_SIGN);
+
+                    if(cellNumber < 0){
+
+                        cellNumber =  this.#getRandomCellNumber();
+                    }
+                }
+
+                cords = this.#getCordsFromCell(cellNumber);
+                                
             break;
         }
 
@@ -80,6 +88,33 @@ export default class NewellNDSimonStrategy extends AIStrategy {
         }
 
         return -1;
+    }
+
+    /**
+     * 
+     * @param {[[]]} board 
+     * @returns 
+     */
+    #getCenterCellNumber(board){ return 4; }
+
+    /**
+     * 
+     * @param {[[]]} board 
+     * @returns 
+     */
+    #getSomeCornerCellNumber(board){
+
+        if(board[0][0] == GameOptions.EMPTY_SIGN)
+            return 0;
+        
+        if(board[0][2] == GameOptions.EMPTY_SIGN)
+            return 2;
+        
+        if(board[2][0] == GameOptions.EMPTY_SIGN)
+            return 6;
+        
+        if(board[2][2] == GameOptions.EMPTY_SIGN)
+            return 8;
     }
 
     /**

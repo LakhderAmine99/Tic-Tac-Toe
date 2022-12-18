@@ -8,17 +8,17 @@
 export default class AIStrategy {
 
     /**
-     * @type {number} #playerStrategy
+     * @type {number} #gameState
      */
-    #playerStrategy;
+    #gameState;
 
     /**
      * 
      * @param {number} playerStrategy 
      */
-    constructor(playerStrategy){ 
+    constructor(gameState){ 
         
-        this.#playerStrategy = playerStrategy;
+        this.#gameState = gameState;
     }
 
     /**
@@ -33,10 +33,10 @@ export default class AIStrategy {
     /**
      * @param {number} value
      */
-    set playerStrategy(value){ this.#playerStrategy = value;  }
+    set gameState(value){ this.#gameState = value;  }
 
     /**
      * @returns {number} The player strategy either ATTACKING or DEFENDING.
      */
-    get playerStrategy(){ return this.#playerStrategy; }
+    get gameState(){ return this.#gameState; }
 }

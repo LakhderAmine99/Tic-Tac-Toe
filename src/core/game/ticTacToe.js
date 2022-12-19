@@ -272,9 +272,7 @@ class TicTacToe {
                         }
                         
                     },250);
-                }
-                
-                this.#emptyCells -= 2;
+                }                
             }
         }
 

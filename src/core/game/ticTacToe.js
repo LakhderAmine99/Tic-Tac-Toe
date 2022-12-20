@@ -1,6 +1,5 @@
 import { GameState,BoardOptions,GameOptions,GameCombo } from './gameState.js';
 import { AISystemManager,DecisionTreeStrategy,RandomStrategy,NewellNDSimonStrategy } from '../ai/@ai.index.js';
-import UIManager from "../ui/UIManager.js";
 
 /**
  * @module
@@ -37,11 +36,6 @@ class TicTacToe {
      * @type {AISystemManager} #aiSystemManager
      */
     #aiSystemManager = null;
-
-    /**
-     * @type {UIManager} #uiManager
-     */
-    #uiManager = null;
 
     /**
      * @type {number} #playerCellX
@@ -103,10 +97,6 @@ class TicTacToe {
             [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
             [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN]
         ];
-
-        this.#setPlayTurn(this.#options.playerSign == "X" ? GameOptions.PLAYER_SIGN : GameOptions.AI_SIGN);
-
-        this.#uiManager = new UIManager();
                 
         this.#aiSystemManager = new AISystemManager(new NewellNDSimonStrategy());
         this.#aiSystemManager.setGameState(this.#gameState);

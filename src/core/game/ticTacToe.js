@@ -1,5 +1,6 @@
 import { GameState,BoardOptions,GameOptions,GameCombo } from './gameState.js';
 import { AISystemManager,DecisionTreeStrategy,RandomStrategy,NewellNDSimonStrategy } from '../ai/@ai.index.js';
+import UIManager from "../ui/UIManager.js";
 
 /**
  * @module
@@ -38,6 +39,11 @@ class TicTacToe {
     #aiSystemManager = null;
 
     /**
+     * @type {UIManager} #uiManager
+     */
+    #uiManager = null;
+
+    /**
      * @type {number} #playerCellX
      */
     #playerCellX;
@@ -58,6 +64,11 @@ class TicTacToe {
     #winner = -1;
 
     /**
+     * @type {number} #emptyCells
+     */
+    #emptyCells = 9;
+
+    /**
      * 
      * @param {HTMLCanvasElement} canvas 
      * @param {{}} options 
@@ -75,7 +86,7 @@ class TicTacToe {
         BoardOptions.OFFSET = (3/2)*BoardOptions.BORDER_WIDTH;
         
         this.#init();
-
+        
         this.update();
     }
 
@@ -87,7 +98,15 @@ class TicTacToe {
         this.#initBoard();
         this.#initListeners();
 
-        this.#playTurn = this.#options.playerSign == "X" ? GameOptions.PLAYER_SIGN : GameOptions.AI_SIGN;
+        this.#gameMap = [
+            [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
+            [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
+            [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN]
+        ];
+
+        this.#setPlayTurn(this.#options.playerSign == "X" ? GameOptions.PLAYER_SIGN : GameOptions.AI_SIGN);
+
+        this.#uiManager = new UIManager();
                 
         this.#aiSystemManager = new AISystemManager(new NewellNDSimonStrategy());
         this.#aiSystemManager.setGameState(this.#gameState);
@@ -98,12 +117,6 @@ class TicTacToe {
      */
     #initBoard(){
 
-        this.#gameMap = [
-            [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
-            [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
-            [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN]
-        ];
-
         this.#drawingContext.beginPath();
         
         this.#drawingContext.fillRect(0,this.#canvas.height/3 - 10,this.#canvas.width,10);
@@ -113,6 +126,14 @@ class TicTacToe {
         this.#drawingContext.fillRect(2*this.#canvas.width/3,0,10,this.#canvas.height);
 
         this.#drawingContext.closePath();
+    }
+
+    /**
+     * @description Init the application event listeners.
+     */
+    #initListeners(){
+
+        this.#canvas.addEventListener('mousedown',(e) => this.#handleClick(e));
     }
 
     /**
@@ -147,14 +168,6 @@ class TicTacToe {
         this.#drawingContext.stroke();
 
         this.#drawingContext.closePath();
-    }
-
-    /**
-     * @description Init the application event listeners.
-     */
-    #initListeners(){
-
-        this.#canvas.addEventListener('mousedown',(e) => this.#handleClick(e));
     }
 
     /**
@@ -254,6 +267,8 @@ class TicTacToe {
 
             this.#aiSystemManager.setGameState(GameState.PLAYING);
 
+            this.#emptyCells--;
+
         }else{
 
             if(this.#canPlay(this.#playerCellX,this.#playerCellY)){
@@ -274,7 +289,9 @@ class TicTacToe {
                         }
                         
                     },250);
-                }                
+                }        
+                
+                this.#emptyCells -= 2;
             }
         }
 
@@ -316,8 +333,15 @@ class TicTacToe {
             if(this.#isWinnerExists() > 0){
                                 
                 this.#gameState = GameState.ENDING;
-                this.#aiSystemManager.setGameState(this.#gameState);
                 this.update();
+                return;
+            }
+
+            if(this.#winner < 0 && this.#emptyCells < 0){
+
+                this.#gameState = GameState.ENDING;
+                this.update();
+                return;
             }
 
         },250);
@@ -341,11 +365,11 @@ class TicTacToe {
 
     /**
      * 
-     * @returns The current game state.
+     * @param {number} turn 
      */
-    #getGameState(){
+    #setPlayTurn(turn){
 
-        return this.#gameState;
+        this.#playTurn = turn;
     }
 
     /**
@@ -376,10 +400,8 @@ class TicTacToe {
     end(){
     
         this.#winner < 0 ? alert("No Winner it's a Tie") : alert("Winner is : "+this.#winner);
-
         this.reset();
     }
-
 
     /**
      * @description
@@ -388,8 +410,17 @@ class TicTacToe {
     
         this.#drawingContext.clearRect(0,0,this.#canvas.width,this.#canvas.height);
 
+        this.#gameMap = [
+            [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
+            [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
+            [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN]
+        ];
+
+        this.#emptyCells = 9;
         this.#winner = -1;
         this.#gameState = GameState.STARTING;
+        this.#setPlayTurn(this.#options.playerSign == "X" ? GameOptions.PLAYER_SIGN : GameOptions.AI_SIGN);
+        this.#aiSystemManager.setGameState(this.#gameState);
 
         this.#initBoard();
     }

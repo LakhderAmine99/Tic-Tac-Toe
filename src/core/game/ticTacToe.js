@@ -30,11 +30,7 @@ class TicTacToe {
     /**
      * @type {[[]]} #gameMap
      */
-    #gameMap = [
-        [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
-        [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
-        [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN]
-    ];
+    #gameMap = null;
 
     /**
      * @type {AISystemManager} #aiSystemManager
@@ -101,6 +97,12 @@ class TicTacToe {
      * @description Init the TicTacToe game board.
      */
     #initBoard(){
+
+        this.#gameMap = [
+            [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
+            [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
+            [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN]
+        ];
 
         this.#drawingContext.beginPath();
         
@@ -312,15 +314,12 @@ class TicTacToe {
         window.setTimeout(()=>{
 
             if(this.#isWinnerExists() > 0){
-                
-                alert("winner : "+this.#winner);
-                
+                                
                 this.#gameState = GameState.ENDING;
                 this.#aiSystemManager.setGameState(this.#gameState);
                 this.update();
-                return;
             }
-                
+
         },250);
     }
 
@@ -374,25 +373,25 @@ class TicTacToe {
     /**
      * @description
      */
-    pause(){
-    
-        // pause the game and show current state.
-    }
-
-    /**
-     * @description
-     */
     end(){
     
-        // end the game and display final state.
+        this.#winner < 0 ? alert("No Winner it's a Tie") : alert("Winner is : "+this.#winner);
+
+        this.reset();
     }
+
 
     /**
      * @description
      */
     reset(){
     
-        // reset the game state.
+        this.#drawingContext.clearRect(0,0,this.#canvas.width,this.#canvas.height);
+
+        this.#winner = -1;
+        this.#gameState = GameState.STARTING;
+
+        this.#initBoard();
     }
 }
 

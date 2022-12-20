@@ -23,9 +23,15 @@ export default class UIManager {
      */
     #restartBtn = null;
 
+    /**
+     * @type {string} #playTurn
+     */
+    #playTurn = null;
+
     constructor(){
 
         this.#init();
+        this.#initListeners();
     }
 
     #init(){
@@ -45,6 +51,9 @@ export default class UIManager {
         this.#oBtn.innerHTML = "O<div>_</div>";
         this.#restartBtn.innerHTML = "Restart Game";
 
+        this.#xBtn.setAttribute('data-value','X');
+        this.#oBtn.setAttribute('data-value','O');
+
         this.#panel.appendChild(this.#xBtn);
         this.#panel.appendChild(this.#oBtn);
         // this.#panel.appendChild(this.#restartBtn);
@@ -52,7 +61,30 @@ export default class UIManager {
         document.body.insertBefore(this.#panel,document.getElementById('app'));
     }
 
+    #initListeners(){
+
+        this.#xBtn.addEventListener('click',(e) => this.#setPlayTurn());
+        this.#oBtn.addEventListener('click',(e) => this.#setPlayTurn());
+        this.#restartBtn.addEventListener('click',(e) => this.restart());
+    }
+
     setGameState(state){}
 
-    setPlayTurn(sign){}    
+    /**
+     * 
+     * @param {Event} e 
+     */
+    #setPlayTurn(e){
+
+        this.#playTurn = e.target.getAttribute('data-value');
+    }
+    
+    /**
+     * 
+     * @returns 
+     */
+    getSelectedPlayTurn(){
+
+        return this.#playTurn;
+    }
 }

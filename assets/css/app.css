@@ -60,7 +60,7 @@ canvas{
     width: 150px;
     text-align: center;
 
-    transition: all 0.4s ease-in-out;
+    transition: background 0.4s ease-in-out;
 }
 
 .xo{
@@ -71,5 +71,11 @@ canvas{
 
 .button:hover{
 
+    background: rgba(0, 243, 178, 0.281);
+}
+
+.selected{
+
     background-color: rgba(0, 243, 178, 0.281);
+    border-bottom-color: rgb(85, 255, 0);
 }

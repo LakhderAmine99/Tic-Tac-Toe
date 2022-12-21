@@ -26,7 +26,7 @@ export default class UIManager {
     /**
      * @type {string} #playTurn
      */
-    #playTurn = null;
+    #playTurn = "X";
 
     constructor(){
 
@@ -43,7 +43,7 @@ export default class UIManager {
         this.#oBtn = document.createElement('div');
         this.#restartBtn = document.createElement('div');
 
-        this.#xBtn.classList.add('button','xo');
+        this.#xBtn.classList.add('button','xo','selected');
         this.#oBtn.classList.add('button','xo');
         this.#restartBtn.classList.add('button','restart');
 
@@ -63,12 +63,10 @@ export default class UIManager {
 
     #initListeners(){
 
-        this.#xBtn.addEventListener('click',(e) => this.#setPlayTurn());
-        this.#oBtn.addEventListener('click',(e) => this.#setPlayTurn());
-        this.#restartBtn.addEventListener('click',(e) => this.restart());
+        this.#xBtn.addEventListener('click',(e) => this.#setPlayTurn(e));
+        this.#oBtn.addEventListener('click',(e) => this.#setPlayTurn(e));
+        this.#restartBtn.addEventListener('click',(e) => this.restart(e));
     }
-
-    setGameState(state){}
 
     /**
      * 
@@ -77,14 +75,42 @@ export default class UIManager {
     #setPlayTurn(e){
 
         this.#playTurn = e.target.getAttribute('data-value');
+
+        if(this.#playTurn == "X"){
+
+            e.target.classList.add('selected');
+            this.#oBtn.classList.remove('selected');
+
+        }else{
+
+            e.target.classList.add('selected');
+            this.#xBtn.classList.remove('selected');
+        }
     }
     
-    /**
-     * 
-     * @returns 
-     */
-    getSelectedPlayTurn(){
+    get PLAYER_SIGN(){
 
         return this.#playTurn;
+    }
+
+    get AI_SIGN(){
+
+        return this.#playTurn == "X" ? "O" : "X";
+    }
+
+    /**
+     * @param {string} score
+     */
+    set xScore(score){
+
+        this.#xBtn.innerHTML = "X<div>"+score+"</div>";
+    }
+
+    /**
+     * @param {string} score
+     */
+    set oScore(score){
+
+        this.#oBtn.innerHTML = "O<div>"+score+"</div>";
     }
 }

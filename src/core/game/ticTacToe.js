@@ -1,5 +1,6 @@
 import { GameState,BoardOptions,GameOptions,GameCombo } from './gameState.js';
 import { AISystemManager,DecisionTreeStrategy,RandomStrategy,NewellNDSimonStrategy } from '../ai/@ai.index.js';
+import UIManager from "../ui/UIManager.js";
 
 /**
  * @module
@@ -36,6 +37,11 @@ class TicTacToe {
      * @type {AISystemManager} #aiSystemManager
      */
     #aiSystemManager = null;
+    
+    /**
+     * @type {UIManager} #uiManager
+     */
+    #uiManager = null;
 
     /**
      * @type {number} #playerCellX
@@ -63,6 +69,26 @@ class TicTacToe {
     #emptyCells = 9;
 
     /**
+     * @type {number} #xScore
+     */
+    #xScore = 0;
+
+    /**
+     * @type {number} #oScore
+     */
+    #oScore = 0;
+
+    /**
+     * @type {string} #playerSign
+     */
+    #playerSign = null;
+
+    /**
+     * @type {string} #aiSign
+     */
+    #aiSign = null;
+
+    /**
      * 
      * @param {HTMLCanvasElement} canvas 
      * @param {{}} options 
@@ -80,7 +106,7 @@ class TicTacToe {
         BoardOptions.OFFSET = (3/2)*BoardOptions.BORDER_WIDTH;
         
         this.#init();
-        
+
         this.update();
     }
 
@@ -97,6 +123,13 @@ class TicTacToe {
             [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
             [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN]
         ];
+
+        this.#uiManager = new UIManager();
+
+        this.#playerSign = this.#uiManager.PLAYER_SIGN;
+        this.#aiSign = this.#uiManager.AI_SIGN;
+
+        this.#setPlayTurn(this.#playerSign == "X" ? GameOptions.PLAYER_SIGN : GameOptions.AI_SIGN);
                 
         this.#aiSystemManager = new AISystemManager(new NewellNDSimonStrategy());
         this.#aiSystemManager.setGameState(this.#gameState);
@@ -252,7 +285,7 @@ class TicTacToe {
             
             let aiMove = this.#nextMove();
                                 
-            this.#draw(this.#options.aiSign,aiMove.x,aiMove.y);
+            this.#draw(this.#aiSign,aiMove.x,aiMove.y);
             this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
 
             this.#aiSystemManager.setGameState(GameState.PLAYING);
@@ -263,7 +296,7 @@ class TicTacToe {
 
             if(this.#canPlay(this.#playerCellX,this.#playerCellY)){
 
-                this.#draw(this.#options.playerSign,this.#playerCellX,this.#playerCellY);
+                this.#draw(this.#playerSign,this.#playerCellX,this.#playerCellY);
                 this.#gameMap[this.#playerCellX][this.#playerCellY] = GameOptions.PLAYER_SIGN;
                 
                 if(this.#isWinnerExists() < 0){
@@ -274,7 +307,7 @@ class TicTacToe {
                         
                         if(this.#canPlay(aiMove.x,aiMove.y)){
                             
-                            this.#draw(this.#options.aiSign,aiMove.x,aiMove.y);
+                            this.#draw(this.#aiSign,aiMove.x,aiMove.y);
                             this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
                         }
                         
@@ -388,8 +421,39 @@ class TicTacToe {
      * @description
      */
     end(){
+
+        if(this.#winner > 0){
+
+            if(this.#winner == GameOptions.PLAYER_SIGN){
+
+                if(this.#playerSign == "X"){
+
+                    this.#uiManager.xScore = ++this.#xScore;
+
+                }else{
+
+                    this.#uiManager.oScore = ++this.#oScore;
+                }
+
+            }else{
+
+                if(this.#aiSign == "X"){
+
+                    this.#uiManager.xScore = ++this.#xScore;
+
+                }else{
+
+                    this.#uiManager.oScore = ++this.#oScore;
+                }
+            }
+
+            alert("Winner is : "+this.#winner);
+
+        }else{
+
+            alert("No Winner it's a Tie") 
+        }
     
-        this.#winner < 0 ? alert("No Winner it's a Tie") : alert("Winner is : "+this.#winner);
         this.reset();
     }
 
@@ -409,10 +473,20 @@ class TicTacToe {
         this.#emptyCells = 9;
         this.#winner = -1;
         this.#gameState = GameState.STARTING;
-        this.#setPlayTurn(this.#options.playerSign == "X" ? GameOptions.PLAYER_SIGN : GameOptions.AI_SIGN);
+        this.#setPlayTurn(this.#playerSign == "X" ? GameOptions.PLAYER_SIGN : GameOptions.AI_SIGN);
         this.#aiSystemManager.setGameState(this.#gameState);
 
         this.#initBoard();
+    }
+
+    get xScore(){
+
+        return this.#xScore;
+    }
+
+    get oScore(){
+
+        return this.#oScore;
     }
 }
 

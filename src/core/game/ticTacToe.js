@@ -1,6 +1,5 @@
 import { GameState,BoardOptions,GameOptions,GameCombo } from './gameState.js';
 import { AISystemManager,DecisionTreeStrategy,RandomStrategy,NewellNDSimonStrategy } from '../ai/@ai.index.js';
-import UIManager from "../ui/UIManager.js";
 
 /**
  * @module
@@ -37,11 +36,6 @@ class TicTacToe {
      * @type {AISystemManager} #aiSystemManager
      */
     #aiSystemManager = null;
-    
-    /**
-     * @type {UIManager} #uiManager
-     */
-    #uiManager = null;
 
     /**
      * @type {number} #playerCellX
@@ -81,12 +75,32 @@ class TicTacToe {
     /**
      * @type {string} #playerSign
      */
-    #playerSign = null;
+    #playerSign = "X";
 
     /**
      * @type {string} #aiSign
      */
-    #aiSign = null;
+    #aiSign = "O";
+
+    /**
+     * @type {HTMLDivElement} #panel
+     */
+    #panel = null;
+
+    /**
+     * @type {HTMLDivElement} #xBtn
+     */
+    #xBtn = null;
+
+    /**
+     * @type {HTMLDivElement} #oBtn
+     */
+    #oBtn = null;
+
+    /**
+     * @type {HTMLDivElement} #restartBtn
+     */
+    #restartBtn = null;
 
     /**
      * 
@@ -106,8 +120,6 @@ class TicTacToe {
         BoardOptions.OFFSET = (3/2)*BoardOptions.BORDER_WIDTH;
         
         this.#init();
-
-        this.update();
     }
 
     /**
@@ -115,6 +127,7 @@ class TicTacToe {
      */
     #init(){
 
+        this.#initUI();
         this.#initBoard();
         this.#initListeners();
 
@@ -123,11 +136,6 @@ class TicTacToe {
             [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN],
             [GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN,GameOptions.EMPTY_SIGN]
         ];
-
-        this.#uiManager = new UIManager();
-
-        this.#playerSign = this.#uiManager.PLAYER_SIGN;
-        this.#aiSign = this.#uiManager.AI_SIGN;
 
         this.#setPlayTurn(this.#playerSign == "X" ? GameOptions.PLAYER_SIGN : GameOptions.AI_SIGN);
                 
@@ -157,6 +165,39 @@ class TicTacToe {
     #initListeners(){
 
         this.#canvas.addEventListener('mousedown',(e) => this.#handleClick(e));
+        this.#xBtn.addEventListener('click',(e) => this.#handleSelectedSign(e));
+        this.#oBtn.addEventListener('click',(e) => this.#handleSelectedSign(e));
+        this.#restartBtn.addEventListener('click',() => this.reset());
+    }
+
+    /**
+     * @description
+     */
+    #initUI(){
+
+        this.#panel = document.createElement('div');
+        this.#panel.classList.add('menu');
+
+        this.#xBtn = document.createElement('div');
+        this.#oBtn = document.createElement('div');
+        this.#restartBtn = document.createElement('div');
+
+        this.#xBtn.classList.add('button','xo','selected');
+        this.#oBtn.classList.add('button','xo');
+        this.#restartBtn.classList.add('button','restart');
+
+        this.#xBtn.innerHTML = "X<div>_</div>";
+        this.#oBtn.innerHTML = "O<div>_</div>";
+        this.#restartBtn.innerHTML = "Restart Game";
+
+        this.#xBtn.setAttribute('data-value','X');
+        this.#oBtn.setAttribute('data-value','O');
+
+        this.#panel.appendChild(this.#xBtn);
+        this.#panel.appendChild(this.#oBtn);
+        // this.#panel.appendChild(this.#restartBtn);
+
+        document.body.insertBefore(this.#panel,document.getElementById('app'));
     }
 
     /**
@@ -292,33 +333,46 @@ class TicTacToe {
 
             this.#emptyCells--;
 
+            this.#setPlayTurn(GameOptions.PLAYER_SIGN);
+
         }else{
 
-            if(this.#canPlay(this.#playerCellX,this.#playerCellY)){
+            if(this.#playTurn == GameOptions.PLAYER_SIGN && this.#canPlay(this.#playerCellX,this.#playerCellY)){
 
                 this.#draw(this.#playerSign,this.#playerCellX,this.#playerCellY);
                 this.#gameMap[this.#playerCellX][this.#playerCellY] = GameOptions.PLAYER_SIGN;
                 
                 if(this.#isWinnerExists() < 0){
                     
+                    this.#setPlayTurn(GameOptions.AI_SIGN);
+
                     let aiMove = this.#nextMove();  
                     
                     window.setTimeout(() => {
-                        
+
                         if(this.#canPlay(aiMove.x,aiMove.y)){
                             
                             this.#draw(this.#aiSign,aiMove.x,aiMove.y);
                             this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
                         }
                         
-                    },250);
+                        this.#setPlayTurn(GameOptions.PLAYER_SIGN);
+
+                    },1000);
                 }        
                 
                 this.#emptyCells -= 2;
             }
         }
 
-        this.#handleGameEnding();
+        window.setTimeout(() => {
+
+            if(this.#isWinnerExists() > 0 || this.#emptyCells <= 0){
+   
+                this.#handleGameEnding();
+            }
+                
+        },1250);
     }
 
     /**
@@ -351,23 +405,88 @@ class TicTacToe {
      */
     #handleGameEnding(){
 
-        window.setTimeout(()=>{
+        if(this.#winner > 0){
+                
+            this.#gameState = GameState.ENDING;
+            this.update();
+            return;
 
-            if(this.#isWinnerExists() > 0){
-                                
-                this.#gameState = GameState.ENDING;
-                this.update();
-                return;
+        }else{
+                
+            this.#gameState = GameState.ENDING;
+            this.update();
+            return;
+        }
+    }
+
+    /**
+     * 
+     * @param {Event} e 
+     */
+    #handleSelectedSign(e){
+
+        if(this.#gameState == GameState.STARTING){
+            
+            let selectedSign = e.target.getAttribute('data-value');
+            
+            if(selectedSign == "X"){
+                
+                this.#playerSign = "X";
+                this.#aiSign = "O";
+                
+                e.target.classList.add('selected');
+                this.#oBtn.classList.remove('selected');
+                
+            }else{
+                
+                this.#playerSign = "O";
+                this.#aiSign = "X";
+                
+                e.target.classList.add('selected');
+                this.#xBtn.classList.remove('selected');
+            }
+            
+            this.#playTurn = selectedSign == "X" ? GameOptions.PLAYER_SIGN : GameOptions.AI_SIGN;
+                
+            this.update();
+
+        }else{
+
+            return;
+        }
+    }
+
+    /**
+     * 
+     */
+    #switchSelectedTurn(){
+
+        if(this.#playTurn == GameOptions.PLAYER_SIGN){
+   
+            if(this.#playerSign == "X"){
+
+                this.#xBtn.classList.add('selected');
+                this.#oBtn.classList.remove('selected');
+            
+            }else{
+
+                this.#oBtn.classList.add('selected');
+                this.#xBtn.classList.remove('selected');
             }
 
-            if(this.#winner < 0 && this.#emptyCells < 0){
+        }else{
 
-                this.#gameState = GameState.ENDING;
-                this.update();
-                return;
+            if(this.#aiSign == "X"){
+
+                this.#xBtn.classList.add('selected');
+                this.#oBtn.classList.remove('selected');
+            
+            }else{
+
+                this.#oBtn.classList.add('selected');
+                this.#xBtn.classList.remove('selected');
             }
-
-        },250);
+        }
     }
 
     /**
@@ -393,6 +512,7 @@ class TicTacToe {
     #setPlayTurn(turn){
 
         this.#playTurn = turn;
+        this.#switchSelectedTurn();
     }
 
     /**
@@ -428,22 +548,22 @@ class TicTacToe {
 
                 if(this.#playerSign == "X"){
 
-                    this.#uiManager.xScore = ++this.#xScore;
+                    this.xScore = ++this.#xScore;
 
                 }else{
 
-                    this.#uiManager.oScore = ++this.#oScore;
+                    this.oScore = ++this.#oScore;
                 }
 
             }else{
 
                 if(this.#aiSign == "X"){
 
-                    this.#uiManager.xScore = ++this.#xScore;
+                    this.xScore = ++this.#xScore;
 
                 }else{
 
-                    this.#uiManager.oScore = ++this.#oScore;
+                    this.oScore = ++this.#oScore;
                 }
             }
 
@@ -451,7 +571,7 @@ class TicTacToe {
 
         }else{
 
-            alert("No Winner it's a Tie") 
+            alert("No Winner it's a Tie");
         }
     
         this.reset();
@@ -473,20 +593,44 @@ class TicTacToe {
         this.#emptyCells = 9;
         this.#winner = -1;
         this.#gameState = GameState.STARTING;
-        this.#setPlayTurn(this.#playerSign == "X" ? GameOptions.PLAYER_SIGN : GameOptions.AI_SIGN);
+        this.#playerSign = "X";
+        this.#aiSign = "O";
+        this.#setPlayTurn(GameOptions.PLAYER_SIGN);
         this.#aiSystemManager.setGameState(this.#gameState);
 
         this.#initBoard();
     }
 
+    /**
+     * @returns
+     */
     get xScore(){
 
         return this.#xScore;
     }
 
+    /**
+     * @returns
+     */
     get oScore(){
 
         return this.#oScore;
+    }
+
+    /**
+     * @param {string} score
+     */
+    set xScore(score){
+
+        this.#xBtn.innerHTML = "X<div>"+score+"</div>";
+    }
+    
+    /**
+     * @param {string} score
+     */
+    set oScore(score){
+    
+        this.#oBtn.innerHTML = "O<div>"+score+"</div>";
     }
 }
 

@@ -69,10 +69,10 @@ canvas{
     justify-content: space-between;
 }
 
-.button:hover{
+/* .button:hover{
 
     background: rgba(0, 243, 178, 0.281);
-}
+} */
 
 .selected{
 

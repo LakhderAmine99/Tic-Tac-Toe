@@ -1,4 +1,4 @@
-import {RandomStrategy,DecisionTreeStrategy,NewellNDSimonStrategy} from "../ai/aiStrategy/@index.js";
+import {RandomStrategy,DecisionTreeStrategy,NewellNDSimonStrategy,MinimaxStrategy,AlphaBetaPruningStrategy} from "../ai/aiStrategy/@index.js";
 import AISystemManager from "../ai/aiManager/AISystemManager.js";
 
 export {
@@ -6,5 +6,7 @@ export {
     RandomStrategy,
     DecisionTreeStrategy,
     NewellNDSimonStrategy,
+    MinimaxStrategy,
+    AlphaBetaPruningStrategy,
     AISystemManager
 };

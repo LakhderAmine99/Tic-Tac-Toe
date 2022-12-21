@@ -18,11 +18,6 @@ class TicTacToe {
     #drawingContext = null;
 
     /**
-     * @type {{}} #options
-     */
-    #options = null;
-
-    /**
      * @type {number} #gameState
      */
     #gameState = GameState.STARTING;
@@ -103,15 +98,18 @@ class TicTacToe {
     #restartBtn = null;
 
     /**
+     * @type {string} #difficulty
+     */
+    #difficulty = "EASY"
+
+    /**
      * 
      * @param {HTMLCanvasElement} canvas 
-     * @param {{}} options 
      */
-    constructor(canvas,options){
+    constructor(canvas){
 
         this.#canvas = canvas;
         this.#drawingContext = this.#canvas.getContext('2d');
-        this.#options = options;
         
         BoardOptions.CELL_WIDTH = (this.#canvas.width/3) - BoardOptions.BORDER_WIDTH;
         BoardOptions.CELL_CENTER = BoardOptions.CELL_WIDTH/2;
@@ -195,9 +193,9 @@ class TicTacToe {
 
         this.#panel.appendChild(this.#xBtn);
         this.#panel.appendChild(this.#oBtn);
-        // this.#panel.appendChild(this.#restartBtn);
 
         document.body.insertBefore(this.#panel,document.getElementById('app'));
+        document.querySelector('.menu-bottom').appendChild(this.#restartBtn);
     }
 
     /**
@@ -321,17 +319,18 @@ class TicTacToe {
             this.#gameState = GameState.PLAYING;
             this.#aiSystemManager.setGameState(this.#gameState);
         }
-        
+
         if(this.#gameState == GameState.STARTING){
-            
+
             let aiMove = this.#nextMove();
-                                
+            
             this.#draw(this.#aiSign,aiMove.x,aiMove.y);
             this.#gameMap[aiMove.x][aiMove.y] = GameOptions.AI_SIGN;
-
-            this.#aiSystemManager.setGameState(GameState.PLAYING);
-
+                
             this.#emptyCells--;
+
+            this.#gameState = GameState.PLAYING;
+            this.#aiSystemManager.setGameState(this.#gameState);
 
             this.#setPlayTurn(GameOptions.PLAYER_SIGN);
 
@@ -524,7 +523,6 @@ class TicTacToe {
 
             case GameState.STARTING:
                 this.play();
-                this.#gameState = GameState.PLAYING;
             break;
             
             case GameState.PLAYING:

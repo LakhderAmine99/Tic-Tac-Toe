@@ -2,6 +2,8 @@ import { GameState,BoardOptions,GameOptions,GameCombo } from './gameState.js';
 import { AISystemManager,DecisionTreeStrategy,RandomStrategy,NewellNDSimonStrategy } from '../ai/@ai.index.js';
 
 /**
+ * 
+ * Tic Tac Toe main game module
  * @module
  * @class
  */

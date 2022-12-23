@@ -46,11 +46,16 @@ export default class NewellNDSimonStrategy extends AIStrategy {
 
                     if(cellNumber < 0){
 
-                        cellNumber =  this.#getSomeCornerCellNumber(board);
+                        cellNumber = this.#getCenterCellNumber(board);
 
                         if(cellNumber < 0){
-
-                            cellNumber =  this.#getRandomCellNumber();
+   
+                            cellNumber =  this.#getSomeCornerCellNumber(board);
+                            
+                            if(cellNumber < 0){
+                                
+                                cellNumber =  this.#getRandomCellNumber();
+                            }
                         }
                     }
                 }
@@ -91,7 +96,7 @@ export default class NewellNDSimonStrategy extends AIStrategy {
     }
 
     /**
-     * 
+     * Returns the center cell number if it's empty.
      * @param {[[]]} board 
      * @returns 
      */
@@ -107,17 +112,21 @@ export default class NewellNDSimonStrategy extends AIStrategy {
      */
     #getSomeCornerCellNumber(board){
 
+        let corners = [];
+
         if(board[0][0] == GameOptions.EMPTY_SIGN)
-            return 0;
+            corners.push(0);
         
         if(board[0][2] == GameOptions.EMPTY_SIGN)
-            return 2;
+            corners.push(2);
         
         if(board[2][0] == GameOptions.EMPTY_SIGN)
-            return 6;
+            corners.push(6);
         
         if(board[2][2] == GameOptions.EMPTY_SIGN)
-            return 8;
+            corners.push(8);
+
+        if(corners.length > 0) return corners[Math.floor(Math.random()*(corners.length-1))];
 
         return -1;
     }

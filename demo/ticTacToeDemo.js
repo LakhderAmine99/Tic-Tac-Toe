@@ -2,39 +2,24 @@ import { TTTGame } from '../src/core/index.core.js';
 
 function TicTacToeApplication(){
 
+    /**
+     * @type {HTMLCanvasElement} canvas
+     */
     const canvas = document.getElementById('application');
 
     /**
      * @type {TTTGame} TicTacToeGame
      */
-    let TicTacToeInstance = null;
+    this.TicTacToeInstance = null;
 
+    /**
+     * Start the game
+     */
     this.start = function(){
 
         console.log("Application started...");
-
-        init();
-    }
-
-    function init(){
-
-        TicTacToeInstance = new TTTGame.TicTacToe(canvas);
-    }
-
-    function play(){
-
-    }
-
-    function end(){
-
-    }
-
-    function pause(){
-
-    }
-
-    function reset(){
         
+        this.TicTacToeInstance = new TTTGame.TicTacToe(canvas);
     }
 }
 

@@ -316,7 +316,7 @@ class TicTacToe {
      */
     play(){
 
-        if(this.#playTurn == GameOptions.PLAYER_SIGN && this.#gameState == GameState.STARTING){
+        if(this.#playTurn == GameOptions.PLAYER_SIGN){
 
             this.#gameState = GameState.PLAYING;
             this.#aiSystemManager.setGameState(this.#gameState);

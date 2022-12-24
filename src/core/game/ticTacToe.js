@@ -3,9 +3,19 @@ import { AISystemManager,DecisionTreeStrategy,RandomStrategy,NewellNDSimonStrate
 
 /**
  * 
- * Tic Tac Toe main game module
- * @module
- * @class
+ * Tic Tac Toe game class. it's class is responsible for the game logic and the game state
+ * 
+ * @class TicTacToe
+ * @module TicTacToe
+ * @version 1.0.0
+ * @since 1.0.0
+ * 
+ * @example
+ * 
+ * const canvas = document.querySelector("canvas");
+ * 
+ * const game = new TicTacToe(canvas);
+ * 
  */
 class TicTacToe {
 

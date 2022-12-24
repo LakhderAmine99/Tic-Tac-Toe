@@ -10,25 +10,7 @@ import { GameCombo, GameOptions, GameState } from '../../game/gameState.js';
  * @module NewellNDSimonStrategy
  * @type {NewellNDSimonStrategy}
  * 
- * @example 
- * 
- * let strategy = new NewellNDSimonStrategy();
- * 
- * let board = [
- * 
- *      [0,0,0],
- *      [0,0,0],
- *      [0,0,0]
- * ];
- * 
- * let state = GameState.PLAYING;
- * 
- * let cords = strategy.predictNextMove(board,state);
- * 
- * console.log(cords); // [1,1]
- * 
  * @see https://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
- * 
  */
 export default class NewellNDSimonStrategy extends AIStrategy {
 
@@ -40,6 +22,21 @@ export default class NewellNDSimonStrategy extends AIStrategy {
     /**
      * 
      * @constructor
+     * @example
+     * 
+     * let ai = new NewellNDSimonStrategy();
+     * 
+     * let board = [
+     * 
+     *  [0,0,0],
+     *  [0,0,0],
+     *  [0,0,0]
+     * 
+     * ];
+     * 
+     * let nextMove = ai.predictNextMove(board,GameState.STARTING);
+     * 
+     * console.log(nextMove); // [1,1]
      */
     constructor(){ super(); }
 

@@ -1,6 +1,35 @@
 import AIStrategy from './AIStrategy.js';
 import { GameCombo, GameOptions, GameState } from '../../game/gameState.js';
 
+/**
+ * The newell and simon's main algorithm for tic tac toe game, this is a simple implementaion of the
+ * algorithm.
+ * 
+ * @extends AIStrategy
+ * @class NewellNDSimonStrategy
+ * @module NewellNDSimonStrategy
+ * @type {NewellNDSimonStrategy}
+ * 
+ * @example 
+ * 
+ * let strategy = new NewellNDSimonStrategy();
+ * 
+ * let board = [
+ * 
+ *      [0,0,0],
+ *      [0,0,0],
+ *      [0,0,0]
+ * ];
+ * 
+ * let state = GameState.PLAYING;
+ * 
+ * let cords = strategy.predictNextMove(board,state);
+ * 
+ * console.log(cords); // [1,1]
+ * 
+ * @see https://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
+ * 
+ */
 export default class NewellNDSimonStrategy extends AIStrategy {
 
     /**

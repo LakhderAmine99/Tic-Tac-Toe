@@ -8,4 +8,4 @@ Play the Tic Tic Toe game with diffrent AI strategies
 
 # Play the game
 
-You can play the game here, `https://lakhderamine99.github.io/Tic-Tac-Toe/`[Play]
+You can play the game here, <a href="https://lakhderamine99.github.io/Tic-Tac-Toe/">Play</a>

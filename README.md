@@ -22,6 +22,10 @@ You can play the game here, <a href="https://lakhderamine99.github.io/Tic-Tac-To
 
     The AI will play randomly
 
+- Newell and Simon
+
+    The AI will play using the Newell and Simon strategy
+
 - Minimax
 
     The AI will play using the minimax algorithm

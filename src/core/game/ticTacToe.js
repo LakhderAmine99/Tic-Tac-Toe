@@ -1,5 +1,5 @@
 import { GameState,BoardOptions,GameOptions,GameCombo } from './gameState.js';
-import { AISystemManager,DecisionTreeStrategy,RandomStrategy,NewellNDSimonStrategy } from '../ai/@ai.index.js';
+import { AISystemManager,RandomStrategy,NewellNDSimonStrategy } from '../ai/@ai.index.js';
 
 /**
  * 

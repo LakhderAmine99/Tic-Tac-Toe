@@ -52,7 +52,7 @@ export default class NewellNDSimonStrategy extends AIStrategy {
         let cords;
         let cellNumber;
 
-        this.#remainingCells = this.#getRemainingCellsFromBoard(board);
+        this.#remainingCells = this.getRemainingCellsFromBoard(board);
 
         switch(state){
             
@@ -158,6 +158,14 @@ export default class NewellNDSimonStrategy extends AIStrategy {
     }
 
     /**
+     * @returns
+     */
+    #getRandomCellNumber(){
+
+        return this.#remainingCells[Math.floor(Math.random()*this.#remainingCells.length)];
+    }
+
+    /**
      * 
      * @param {[]} row A numeric array.
      * @param {number} playerSign A numeric expression. 
@@ -173,35 +181,6 @@ export default class NewellNDSimonStrategy extends AIStrategy {
         if(counter == 2) return true;
 
         return false;
-    }
-
-    /**
-     * 
-     * @param {[[]]} board 
-     * @returns 
-     */
-    #getRemainingCellsFromBoard(board){
-
-        let emptyCells = [];
-        
-        for(let i=0; i<board.length; i++){
-
-            for(let j=0; j<board[i].length; j++){
-
-                if(board[i][j] == GameOptions.EMPTY_SIGN)
-                    emptyCells.push(3*i+j);
-            }
-        }
-
-        return emptyCells;
-    }
-
-    /**
-     * @returns
-     */
-    #getRandomCellNumber(){
-
-        return this.#remainingCells[Math.floor(Math.random()*this.#remainingCells.length)];
     }
 
     /**

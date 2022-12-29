@@ -6,7 +6,8 @@
 
 :root{
 
-    --main-color:rgb(0, 220, 33);
+    --main-color:rgb(0, 220, 165);
+    /* --main-color:rgb(0, 220, 33); */
 }
 
 html,body{

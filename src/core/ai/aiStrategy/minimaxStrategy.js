@@ -17,6 +17,30 @@ export default class MinimaxStrategy extends AIStrategy {
      */
     predictNextMove(board,state){
 
+        let cords;
+
+        cords = this.#getCordsFromCell(this.#minimax(board));
+
+        return [cords.x,cords.y];
+    }
+
+    /**
+     * 
+     * @param {[[]]} board The current game board.
+     * @returns {number} A numeric expression.
+     */
+    #minimax(board){
+
+        return;
+    }
+
+    /**
+     * 
+     * @param {number} cellNumber 
+     * @returns 
+     */
+    #getCordsFromCell(cellNumber){
+
         return;
     }
 } 

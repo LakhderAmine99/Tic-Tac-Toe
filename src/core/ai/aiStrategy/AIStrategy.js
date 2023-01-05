@@ -49,7 +49,7 @@ export default class AIStrategy {
      * @param {number} cellNumber 
      * @returns 
      */
-    #getCordsFromCell(cellNumber){ 
+    getCordsFromCell(cellNumber){ 
         
         return {
             x:Math.floor(cellNumber/3),

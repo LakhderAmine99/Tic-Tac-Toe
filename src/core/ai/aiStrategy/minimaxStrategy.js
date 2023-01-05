@@ -33,14 +33,4 @@ export default class MinimaxStrategy extends AIStrategy {
 
         return;
     }
-
-    /**
-     * 
-     * @param {number} cellNumber 
-     * @returns 
-     */
-    #getCordsFromCell(cellNumber){
-
-        return;
-    }
 } 

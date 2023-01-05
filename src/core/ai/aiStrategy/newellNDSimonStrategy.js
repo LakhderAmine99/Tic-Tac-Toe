@@ -58,7 +58,7 @@ export default class NewellNDSimonStrategy extends AIStrategy {
             
             case GameState.STARTING:
 
-                cords = this.#getCordsFromCell(this.#getCenterCellNumber(board));
+                cords = this.getCordsFromCell(this.#getCenterCellNumber(board));
 
             break;
 
@@ -86,7 +86,7 @@ export default class NewellNDSimonStrategy extends AIStrategy {
                     }
                 }
 
-                cords = this.#getCordsFromCell(cellNumber);
+                cords = this.getCordsFromCell(cellNumber);
                                 
             break;
         }
@@ -181,18 +181,5 @@ export default class NewellNDSimonStrategy extends AIStrategy {
         if(counter == 2) return true;
 
         return false;
-    }
-
-    /**
-     * 
-     * @param {number} cellNumber 
-     * @returns 
-     */
-    #getCordsFromCell(cellNumber){ 
-        
-        return {
-            x:Math.floor(cellNumber/3),
-            y:cellNumber - 3*Math.floor(cellNumber/3)
-        };
     }
 }

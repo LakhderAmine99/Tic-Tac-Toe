@@ -43,4 +43,17 @@ export default class AIStrategy {
 
         return emptyCells;
     }
+
+    /**
+     * 
+     * @param {number} cellNumber 
+     * @returns 
+     */
+    #getCordsFromCell(cellNumber){ 
+        
+        return {
+            x:Math.floor(cellNumber/3),
+            y:cellNumber - 3*Math.floor(cellNumber/3)
+        };
+    }
 }

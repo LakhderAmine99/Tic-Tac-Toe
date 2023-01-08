@@ -1,10 +1,35 @@
 import AIStrategy from './AIStrategy.js';
 import { GameOptions } from '../../game/gameState.js';
 
+/**
+ * 
+ * The minimax strategy based on the minimax algorithm, used to predict the next move.
+ * 
+ * @extends AIStrategy
+ * @class MinimaxStrategy
+ * @module MinimaxStrategy
+ * @type {MinimaxStrategy}
+ * 
+ */
 export default class MinimaxStrategy extends AIStrategy {
 
     /**
      * @constructor
+     * @example
+     * 
+     * let ai = new MinimaxStrategy();
+     * 
+     * let board = [
+     * 
+     *  [0,0,0],
+     *  [0,0,0],
+     *  [0,0,0]
+     * 
+     * ];
+     * 
+     * let nextMove = ai.predictNextMove(board,GameState.STARTING);
+     * 
+     * console.log(nextMove); // [1,1]
      */
     constructor(){ super(); }
 
@@ -19,7 +44,7 @@ export default class MinimaxStrategy extends AIStrategy {
 
         let cords;
 
-        cords = this.#getCordsFromCell(this.#minimax(board));
+        cords = this.getCordsFromCell(this.#minimax(board));
 
         return [cords.x,cords.y];
     }

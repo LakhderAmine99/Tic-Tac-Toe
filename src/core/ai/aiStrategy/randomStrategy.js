@@ -1,5 +1,15 @@
 import AIStrategy from './AIStrategy.js';
 
+/**
+ * 
+ * The random strategy, used to predict the next move randomly.
+ * 
+ * @extends AIStrategy
+ * @class RandomStrategy
+ * @module RandomStrategy
+ * @type {RandomStrategy}
+ * 
+ */
 export default class RandomStrategy extends AIStrategy {
 
     /**
@@ -10,10 +20,12 @@ export default class RandomStrategy extends AIStrategy {
     
     /**
      * 
+     * Predict the next move based on the current game state.
+     * 
      * @override
      * @param {[[]]} board The current game board.
      * @param {number} state The current game state.
-     * @returns 
+     * @returns {[]} A vector with the cell x and y cordinates.
      */
     predictNextMove(board,state){
 

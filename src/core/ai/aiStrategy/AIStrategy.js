@@ -2,9 +2,14 @@ import { GameOptions } from "../../game/gameState.js";
 
 /**
  * 
+ * The base class for all AI strategies.
+ * 
  * @abstract
- * @class
- * @interface
+ * @virtual
+ * @class AIStrategy
+ * @module AIStrategy
+ * @type {AIStrategy}
+ * 
  */
 export default class AIStrategy {
 
@@ -20,7 +25,8 @@ export default class AIStrategy {
 
     /**
      * 
-     * @abstract
+     * Predict the next move based on the current game state.
+     * 
      * @virtual
      * @param {[[]]} board The current game board.
      * @param {number} state The current game state.
@@ -30,8 +36,10 @@ export default class AIStrategy {
 
     /**
      * 
+     * Returns the remaining cells from the board.
+     * 
      * @param {[[]]} board 
-     * @returns 
+     * @returns {[]} An array with the remaining cells.
      */
     getRemainingCellsFromBoard(board){
 
@@ -64,8 +72,9 @@ export default class AIStrategy {
 
     /**
      * Returns the center cell number if it's empty.
+     * 
      * @param {[[]]} board 
-     * @returns 
+     * @returns {number} The center cell number.
      */
     getCenterCellNumber(board){ 
 
@@ -74,8 +83,10 @@ export default class AIStrategy {
 
     /**
      * 
+     * Returns a corner cell number if it's empty.
+     * 
      * @param {[[]]} board 
-     * @returns 
+     * @returns {number} A corner cell number.
      */
     getSomeCornerCellNumber(board){
 
@@ -99,7 +110,10 @@ export default class AIStrategy {
     }
 
     /**
-     * @returns
+     * 
+     * Returns a random cell number from the remaining cells.
+     * 
+     * @returns {number} A random cell number.
      */
     getRandomCellNumber(){
 

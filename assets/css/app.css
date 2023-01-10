@@ -81,7 +81,56 @@ canvas{
     background: rgba(0, 243, 178, 0.281);
 }
 
+.difficulty{
+
+    position: absolute;
+    left: 0;
+    z-index: 10;
+}
+
+.difficulty-options{
+
+    position: absolute;
+    left: 0;
+    margin: 1rem;
+    padding: 1rem;
+    top: 4rem;
+    width: 150px;
+    border-radius: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.804);
+    transition: all 0.4s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.difficulty-option{
+
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.61);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    background-color: rgba(0, 243, 178, 0.133);
+    border-radius: 0.25rem;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.difficulty-option:hover{
+    background-color: rgba(0, 243, 101, 0.41);
+}
+
 .selected{
     background-color: rgba(0, 243, 178, 0.281);
     border-bottom-color: rgb(85, 255, 0);
+}
+
+.selected-option{
+
+    color: white;
+    background-color: rgba(0, 243, 101, 0.571);
+}
+
+.hidden{
+
+    opacity: 0;
+    transform: translateX(-150px) translateY(-25px);
 }

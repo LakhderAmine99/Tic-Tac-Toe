@@ -1,5 +1,5 @@
 import { GameState,BoardOptions,GameOptions,GameCombo } from './gameState.js';
-import { AISystemManager,RandomStrategy,NewellNDSimonStrategy } from '../ai/@ai.index.js';
+import { AISystemManager,RandomStrategy,NewellNDSimonStrategy,MinimaxStrategy } from '../ai/@ai.index.js';
 
 /**
  * 
@@ -149,7 +149,7 @@ class TicTacToe {
 
         this.#setPlayTurn(this.#playerSign == "X" ? GameOptions.PLAYER_SIGN : GameOptions.AI_SIGN);
                 
-        this.#aiSystemManager = new AISystemManager(new NewellNDSimonStrategy());
+        this.#aiSystemManager = new AISystemManager(new MinimaxStrategy());
         this.#aiSystemManager.setGameState(this.#gameState);
     }
 

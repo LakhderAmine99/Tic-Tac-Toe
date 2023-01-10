@@ -19,9 +19,14 @@ export default class AIStrategy {
     remainingCells = [];
 
     /**
+     * @type {object} instance
+     */
+    static instance = null;
+
+    /**
      * 
      */
-    constructor(){ }
+    constructor(){}
 
     /**
      * 
@@ -118,5 +123,28 @@ export default class AIStrategy {
     getRandomCellNumber(){
 
         return this.remainingCells[Math.floor(Math.random()*this.remainingCells.length)];
+    }
+
+    /**
+     * 
+     * Get the instance of the current object.
+     * 
+     * @returns {AIStrategy} An instance of the current object.
+     */
+    static getInstance(){
+
+        if(this.instance == null){
+
+            this.instance = new this();
+            
+        }else{
+            
+            if(this.name != this.instance.constructor.name){
+                
+                this.instance = new this();
+            }
+        }
+
+        return this.instance
     }
 }

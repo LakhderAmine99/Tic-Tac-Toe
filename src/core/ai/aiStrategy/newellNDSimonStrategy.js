@@ -15,11 +15,6 @@ import { GameCombo, GameOptions, GameState } from '../../game/gameState.js';
 export default class NewellNDSimonStrategy extends AIStrategy {
 
     /**
-     * @type {[]} #remainingCells
-     */
-    #remainingCells = [];
-
-    /**
      * 
      * @constructor
      * @example
@@ -52,13 +47,13 @@ export default class NewellNDSimonStrategy extends AIStrategy {
         let cords;
         let cellNumber;
 
-        this.#remainingCells = this.getRemainingCellsFromBoard(board);
+        super.remainingCells = this.getRemainingCellsFromBoard(board);
 
         switch(state){
             
             case GameState.STARTING:
 
-                cords = this.getCordsFromCell(this.#getCenterCellNumber(board));
+                cords = this.getCordsFromCell(this.getCenterCellNumber(board));
 
             break;
 
@@ -72,15 +67,15 @@ export default class NewellNDSimonStrategy extends AIStrategy {
 
                     if(cellNumber < 0){
 
-                        cellNumber = this.#getCenterCellNumber(board);
+                        cellNumber = this.getCenterCellNumber(board);
 
                         if(cellNumber < 0){
    
-                            cellNumber =  this.#getSomeCornerCellNumber(board);
+                            cellNumber =  this.getSomeCornerCellNumber(board);
                             
                             if(cellNumber < 0){
                                 
-                                cellNumber =  this.#getRandomCellNumber();
+                                cellNumber =  this.getRandomCellNumber();
                             }
                         }
                     }
@@ -119,50 +114,6 @@ export default class NewellNDSimonStrategy extends AIStrategy {
         }
 
         return -1;
-    }
-
-    /**
-     * Returns the center cell number if it's empty.
-     * @param {[[]]} board 
-     * @returns 
-     */
-    #getCenterCellNumber(board){ 
-
-        return board[1][1] == GameOptions.EMPTY_SIGN ? 4 : -1
-    }
-
-    /**
-     * 
-     * @param {[[]]} board 
-     * @returns 
-     */
-    #getSomeCornerCellNumber(board){
-
-        let corners = [];
-
-        if(board[0][0] == GameOptions.EMPTY_SIGN)
-            corners.push(0);
-        
-        if(board[0][2] == GameOptions.EMPTY_SIGN)
-            corners.push(2);
-        
-        if(board[2][0] == GameOptions.EMPTY_SIGN)
-            corners.push(6);
-        
-        if(board[2][2] == GameOptions.EMPTY_SIGN)
-            corners.push(8);
-
-        if(corners.length > 0) return corners[Math.floor(Math.random()*(corners.length-1))];
-
-        return -1;
-    }
-
-    /**
-     * @returns
-     */
-    #getRandomCellNumber(){
-
-        return this.#remainingCells[Math.floor(Math.random()*this.#remainingCells.length)];
     }
 
     /**

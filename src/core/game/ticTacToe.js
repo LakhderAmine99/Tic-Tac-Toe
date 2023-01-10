@@ -110,9 +110,29 @@ class TicTacToe {
     #restartBtn = null;
 
     /**
-     * @type {string} #difficulty
+     * @type {HTMLDivElement} #difficulty
      */
-    #difficulty = "EASY"
+    #selectDifficultyBtn = null
+
+    /**
+     * @type {HTMLDivElement} #difficultyOptions
+     */
+    #difficultyOptions = null;
+
+    /**
+     * @type {HTMLDivElement} #easy
+     */
+    #easy = null;
+
+    /**
+     * @type {HTMLDivElement} #medium
+     */
+    #medium = null;
+
+    /**
+     * @type {HTMLDivElement} #impossible
+     */
+    #impossible = null;
 
     /**
      * 
@@ -149,7 +169,7 @@ class TicTacToe {
 
         this.#setPlayTurn(this.#playerSign == "X" ? GameOptions.PLAYER_SIGN : GameOptions.AI_SIGN);
                 
-        this.#aiSystemManager = new AISystemManager(new MinimaxStrategy());
+        this.#aiSystemManager = new AISystemManager(new NewellNDSimonStrategy());
         this.#aiSystemManager.setGameState(this.#gameState);
     }
 
@@ -178,6 +198,10 @@ class TicTacToe {
         this.#xBtn.addEventListener('click',(e) => this.#handleSelectedSign(e));
         this.#oBtn.addEventListener('click',(e) => this.#handleSelectedSign(e));
         this.#restartBtn.addEventListener('click',() => this.reset());
+        this.#selectDifficultyBtn.addEventListener('click',(e) => this.#handleDisplayDifficultyOptions(e));
+        this.#easy.addEventListener('click',(e) => this.#handleSelectDifficulty(e));
+        this.#medium.addEventListener('click',(e) => this.#handleSelectDifficulty(e));
+        this.#impossible.addEventListener('click',(e) => this.#handleSelectDifficulty(e));
     }
 
     /**
@@ -191,20 +215,48 @@ class TicTacToe {
         this.#xBtn = document.createElement('div');
         this.#oBtn = document.createElement('div');
         this.#restartBtn = document.createElement('div');
+        this.#selectDifficultyBtn = document.createElement('div');
 
         this.#xBtn.classList.add('button','xo','selected');
         this.#oBtn.classList.add('button','xo');
         this.#restartBtn.classList.add('button','restart');
+        this.#selectDifficultyBtn.classList.add('button','difficulty');
 
         this.#xBtn.innerHTML = "X<div>_</div>";
         this.#oBtn.innerHTML = "O<div>_</div>";
         this.#restartBtn.innerHTML = "Restart Game";
+        this.#selectDifficultyBtn.innerHTML = "Medium";
+
+        this.#difficultyOptions = document.createElement('div');
+        this.#difficultyOptions.classList.add('difficulty-options','hidden');
+
+        this.#easy = document.createElement('div');
+        this.#easy.classList.add('difficulty-option');
+        this.#easy.setAttribute('data-value','0');
+
+        this.#medium = document.createElement('div');
+        this.#medium.classList.add('difficulty-option','selected-option');
+        this.#medium.setAttribute('data-value','1');
+
+        this.#impossible = document.createElement('div');
+        this.#impossible.classList.add('difficulty-option');
+        this.#impossible.setAttribute('data-value','2');
+
+        this.#easy.innerHTML = "Easy";
+        this.#medium.innerHTML = "Medium";
+        this.#impossible.innerHTML = "Impossible";
+
+        this.#difficultyOptions.appendChild(this.#easy);
+        this.#difficultyOptions.appendChild(this.#medium);
+        this.#difficultyOptions.appendChild(this.#impossible);
 
         this.#xBtn.setAttribute('data-value','X');
         this.#oBtn.setAttribute('data-value','O');
 
         this.#panel.appendChild(this.#xBtn);
         this.#panel.appendChild(this.#oBtn);
+        this.#panel.appendChild(this.#selectDifficultyBtn);
+        this.#panel.appendChild(this.#difficultyOptions);
 
         document.body.insertBefore(this.#panel,document.getElementById('app'));
         document.querySelector('.menu-bottom').appendChild(this.#restartBtn);
@@ -464,6 +516,63 @@ class TicTacToe {
         }else{
 
             return;
+        }
+    }
+
+    /**
+     * 
+     * @param {Event} e 
+     */
+    #handleDisplayDifficultyOptions(e){
+
+        if(this.#gameState == GameState.STARTING){
+            
+            this.#difficultyOptions.classList.toggle('hidden');
+        }
+    }
+
+    /**
+     * 
+     * @param {Event} e 
+     */
+    #handleSelectDifficulty(e){
+        
+        if(this.#gameState == GameState.STARTING){
+            
+            let selectedDifficulty = e.target.getAttribute('data-value');
+
+            this.#easy.classList.remove('selected-option');
+            this.#medium.classList.remove('selected-option');
+            this.#impossible.classList.remove('selected-option');
+            
+            switch(selectedDifficulty){
+
+                case "0":
+
+                    this.#aiSystemManager.setAIStrategy(RandomStrategy.getInstance());
+                    this.#easy.classList.add('selected-option');
+
+                break;
+
+                case "1":
+
+                    this.#aiSystemManager.setAIStrategy(NewellNDSimonStrategy.getInstance());
+                    this.#medium.classList.add('selected-option');
+
+                break;
+
+                case "2":
+
+                    this.#aiSystemManager.setAIStrategy(MinimaxStrategy.getInstance());
+                    this.#impossible.classList.add('selected-option');
+
+                break;
+            }
+            
+            this.#selectDifficultyBtn.innerHTML = selectedDifficulty == '0' ? "Easy" : 
+                                                  selectedDifficulty == '1' ? "Medium" :
+                                                  "Impossible";
+            this.#difficultyOptions.classList.add('hidden');
         }
     }
 

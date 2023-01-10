@@ -37,10 +37,12 @@ export default class NewellNDSimonStrategy extends AIStrategy {
 
     /**
      * 
+     * Predict the next move based on the current game state.
+     * 
      * @override
      * @param {[[]]} board The current game board.
      * @param {number} state The current game state.
-     * @returns
+     * @returns {[]} A vector with the cell x and y cordinates.
      */
     predictNextMove(board,state){
 
@@ -118,8 +120,11 @@ export default class NewellNDSimonStrategy extends AIStrategy {
 
     /**
      * 
+     * Check if the given row has two player signs and one empty sign.
+     * 
      * @param {[]} row A numeric array.
-     * @param {number} playerSign A numeric expression. 
+     * @param {number} playerSign A numeric expression.
+     * @returns {boolean} True if the row has two player signs and one empty sign, otherwise false.
      */
     #hasTwo(row,playerSign){
 

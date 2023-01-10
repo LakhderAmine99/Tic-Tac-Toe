@@ -3,7 +3,7 @@ import { GameOptions,GameCombo, GameState } from '../../game/gameState.js';
 
 /**
  * 
- * The minimax strategy based on the minimax algorithm, used to predict the next move.
+ * The minimax strategy based on the minimax algorithm, used to predict the best next move.
  * 
  * @extends AIStrategy
  * @class MinimaxStrategy
@@ -64,7 +64,10 @@ export default class MinimaxStrategy extends AIStrategy {
 
     /**
      * 
+     * Get the cell number of the best score found by the minimax algorithm.
+     * 
      * @param {[[]]} board 
+     * @returns {number} The cell number of the best score found by the minimax algorithm.
      */
     #getNextMoveCellNumber(board){
 
@@ -96,15 +99,19 @@ export default class MinimaxStrategy extends AIStrategy {
     }
 
     /**
+     * The minimax algorithm Implementation for Tic Tac Toe game.
+     * 
+     * @private
+     * @see https://en.wikipedia.org/wiki/Minimax
      * 
      * @param {[[]]} board The current game board.
      * @param {number} depth The depth of our tree.
      * @param {boolean} isMaximizing Either the maximizer player or the minimizer. 
-     * @returns {number} A numeric expression.
+     * @returns {number} The score of the current board.
      */
     #minimax(board,depth,isMaximizing){
 
-        let endingStateScore = this.#getEndingStateScore(board);
+        let endingStateScore = this.#evaluate(board);
 
         if(endingStateScore != null) return endingStateScore;
 
@@ -158,10 +165,12 @@ export default class MinimaxStrategy extends AIStrategy {
 
     /**
      * 
+     * Check if the game has ended and return the score of the current board.
+     * 
      * @param {[[]]} board 
-     * @returns 
+     * @returns {number} The score of the current board or null if the game has not ended.
      */
-    #getEndingStateScore(board){
+    #evaluate(board){
 
         for(let gc of GameCombo){
 

@@ -1,5 +1,12 @@
 import AIStrategy from "../aiStrategy/AIStrategy.js";
 
+/**
+ * 
+ * @class AISystemManager
+ * @module AISystemManager
+ * @type {AISystemManager}
+ * 
+ */
 export class AISystemManager {
 
     /**

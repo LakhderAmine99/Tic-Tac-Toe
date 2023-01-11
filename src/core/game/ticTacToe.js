@@ -1,5 +1,5 @@
 import { GameState,BoardOptions,GameOptions,GameCombo } from './gameState.js';
-import { AISystemManager,RandomStrategy,NewellNDSimonStrategy,MinimaxStrategy } from '../ai/@ai.index.js';
+import { AISystemManager,RandomStrategy,NewellNDSimonStrategy,MinimaxStrategy,AlphaBetaPruningStrategy } from '../ai/@ai.index.js';
 
 /**
  * 
@@ -169,7 +169,7 @@ class TicTacToe {
 
         this.#setPlayTurn(this.#playerSign == "X" ? GameOptions.PLAYER_SIGN : GameOptions.AI_SIGN);
                 
-        this.#aiSystemManager = new AISystemManager(new NewellNDSimonStrategy());
+        this.#aiSystemManager = new AISystemManager(new AlphaBetaPruningStrategy());
         this.#aiSystemManager.setGameState(this.#gameState);
     }
 
@@ -225,7 +225,7 @@ class TicTacToe {
         this.#xBtn.innerHTML = "X<div>_</div>";
         this.#oBtn.innerHTML = "O<div>_</div>";
         this.#restartBtn.innerHTML = "Restart Game";
-        this.#selectDifficultyBtn.innerHTML = "Medium";
+        this.#selectDifficultyBtn.innerHTML = "Difficulty";
 
         this.#difficultyOptions = document.createElement('div');
         this.#difficultyOptions.classList.add('difficulty-options','hidden');

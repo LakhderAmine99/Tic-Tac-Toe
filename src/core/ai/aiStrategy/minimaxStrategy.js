@@ -111,7 +111,7 @@ export default class MinimaxStrategy extends AIStrategy {
      */
     #minimax(board,depth,isMaximizing){
 
-        let endingStateScore = this.#evaluate(board);
+        let endingStateScore = this.#evaluate(board,depth);
 
         if(endingStateScore != null) return endingStateScore;
 
@@ -168,9 +168,10 @@ export default class MinimaxStrategy extends AIStrategy {
      * Check if the game has ended and return the score of the current board.
      * 
      * @param {[[]]} board 
+     * @param {number} depth The depth of our tree.
      * @returns {number} The score of the current board or null if the game has not ended.
      */
-    #evaluate(board){
+    #evaluate(board,depth){
 
         for(let gc of GameCombo){
 
@@ -183,8 +184,8 @@ export default class MinimaxStrategy extends AIStrategy {
                 if(c1 == c2 && c2 == c3){
 
                     if(c1 == GameOptions.AI_SIGN)
-                        return 1;
-                    return -1;
+                        return 10 - depth;
+                    return depth - 10;
                 } 
             }
         };

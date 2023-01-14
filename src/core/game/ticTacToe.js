@@ -169,7 +169,7 @@ class TicTacToe {
 
         this.#setPlayTurn(this.#playerSign == "X" ? GameOptions.PLAYER_SIGN : GameOptions.AI_SIGN);
                 
-        this.#aiSystemManager = new AISystemManager(new AlphaBetaPruningStrategy());
+        this.#aiSystemManager = new AISystemManager(new NewellNDSimonStrategy());
         this.#aiSystemManager.setGameState(this.#gameState);
     }
 
